@@ -1,0 +1,608 @@
+<html>
+    <head>
+    <style>
+        /* PrismJS 1.19.0
+https://prismjs.com/download.html#themes=prism-solarizedlight&languages=clike+go */
+        /*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+        /*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            color: #657b83;
+            /* base00 */
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 1em;
+            text-align: left;
+            white-space: pre;
+            word-spacing: normal;
+            word-break: normal;
+            word-wrap: normal;
+
+            line-height: 1.5;
+
+            -moz-tab-size: 4;
+            -o-tab-size: 4;
+            tab-size: 4;
+
+            -webkit-hyphens: none;
+            -moz-hyphens: none;
+            -ms-hyphens: none;
+            hyphens: none;
+        }
+
+        pre[class*="language-"]::-moz-selection,
+        pre[class*="language-"] ::-moz-selection,
+        code[class*="language-"]::-moz-selection,
+        code[class*="language-"] ::-moz-selection {
+            background: #073642;
+            /* base02 */
+        }
+
+        pre[class*="language-"]::selection,
+        pre[class*="language-"] ::selection,
+        code[class*="language-"]::selection,
+        code[class*="language-"] ::selection {
+            background: #073642;
+            /* base02 */
+        }
+
+        /* Code blocks */
+        pre[class*="language-"] {
+            padding: 1em;
+            margin: .5em 0;
+            overflow: auto;
+            border-radius: 0.3em;
+        }
+
+        :not(pre)>code[class*="language-"],
+        pre[class*="language-"] {
+            background-color: #fdf6e3;
+            /* base3 */
+        }
+
+        /* Inline code */
+        :not(pre)>code[class*="language-"] {
+            padding: .1em;
+            border-radius: .3em;
+        }
+
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata {
+            color: #93a1a1;
+            /* base1 */
+        }
+
+        .token.punctuation {
+            color: #586e75;
+            /* base01 */
+        }
+
+        .token.namespace {
+            opacity: .7;
+        }
+
+        .token.property,
+        .token.tag,
+        .token.boolean,
+        .token.number,
+        .token.constant,
+        .token.symbol,
+        .token.deleted {
+            color: #268bd2;
+            /* blue */
+        }
+
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.url,
+        .token.inserted {
+            color: #2aa198;
+            /* cyan */
+        }
+
+        .token.entity {
+            color: #657b83;
+            /* base00 */
+            background: #eee8d5;
+            /* base2 */
+        }
+
+        .token.atrule,
+        .token.attr-value,
+        .token.keyword {
+            color: #859900;
+            /* green */
+        }
+
+        .token.function,
+        .token.class-name {
+            color: #b58900;
+            /* yellow */
+        }
+
+        .token.regex,
+        .token.important,
+        .token.variable {
+            color: #cb4b16;
+            /* orange */
+        }
+
+        .token.important,
+        .token.bold {
+            font-weight: bold;
+        }
+
+        .token.italic {
+            font-style: italic;
+        }
+
+        .token.entity {
+            cursor: help;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+        <code class="language-go">
+{{code}}
+       goroutine 38 [running]:
+github.com/yehan2002/watchdog.stack(0xc00b442600, 0x39, 0xc0007afe68)
+	/home/yehan/go/src/github.com/yehan2002/watchdog/watchdog.go:102 +0x1c3
+github.com/yehan2002/watchdog.Dump(0x97820a, 0x10)
+	/home/yehan/go/src/github.com/yehan2002/watchdog/watchdog.go:64 +0x5ba
+main.listener()
+	/home/yehan/go/src/Firework/main.go:41 +0x292
+created by main.main
+	/home/yehan/go/src/Firework/main.go:71 +0x47
+
+goroutine 1 [IO wait]:
+internal/poll.runtime_pollWait(0x7f64594f7f08, 0x72, 0x0)
+	/usr/local/go/src/runtime/netpoll.go:184 +0x55
+internal/poll.(*pollDesc).wait(0xc000222098, 0x72, 0x0, 0x0, 0x973b21)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Accept(0xc000222080, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/usr/local/go/src/internal/poll/fd_unix.go:384 +0x1f8
+net.(*netFD).accept(0xc000222080, 0x415355, 0x8f6b40, 0x958620)
+	/usr/local/go/src/net/fd_unix.go:238 +0x42
+net.(*TCPListener).accept(0xc0001e6020, 0x41171a, 0xc0001e4120, 0xc00026bef0)
+	/usr/local/go/src/net/tcpsock_posix.go:139 +0x32
+net.(*TCPListener).Accept(0xc0001e6020, 0xc0001e4120, 0xc00022e100, 0xc0002843f0, 0x0)
+	/usr/local/go/src/net/tcpsock.go:261 +0x47
+Firework/server.(*Server).Start(0xc00022e180)
+	/home/yehan/go/src/Firework/server/server.go:63 +0x1a3
+main.main()
+	/home/yehan/go/src/Firework/main.go:73 +0x8c
+
+goroutine 19 [chan receive]:
+Firework/server/prof.init.0.func1()
+	/home/yehan/go/src/Firework/server/prof/prof.go:48 +0x48
+created by Firework/server/prof.init.0
+	/home/yehan/go/src/Firework/server/prof/prof.go:44 +0x35
+
+goroutine 20 [chan receive]:
+Firework/world/worldGroup.(*WorldGroup).tick(0xc0000cd340)
+	/home/yehan/go/src/Firework/world/worldGroup/worlds.go:77 +0xd0
+created by Firework/world/worldGroup.(*WorldGroup).Init
+	/home/yehan/go/src/Firework/world/worldGroup/worlds.go:52 +0x7a
+
+goroutine 21 [chan receive]:
+Firework/world/worldGroup.(*WorldGroup).worldTick(0xc0000cd340)
+	/home/yehan/go/src/Firework/world/worldGroup/worlds.go:89 +0xd0
+created by Firework/world/worldGroup.(*WorldGroup).Init
+	/home/yehan/go/src/Firework/world/worldGroup/worlds.go:53 +0x9c
+
+goroutine 22 [syscall]:
+os/signal.signal_recv(0xa120a0)
+	/usr/local/go/src/runtime/sigqueue.go:147 +0x9c
+os/signal.loop()
+	/usr/local/go/src/os/signal/signal_unix.go:23 +0x22
+created by os/signal.init.0
+	/usr/local/go/src/os/signal/signal_unix.go:29 +0x41
+
+goroutine 35 [chan receive, 2 minutes]:
+Firework/server/prof/web.setupServer()
+	/home/yehan/go/src/Firework/server/prof/web/main.go:96 +0x14f
+created by Firework/server/prof/web.init.0
+	/home/yehan/go/src/Firework/server/prof/web/main.go:104 +0x35
+
+goroutine 36 [chan receive]:
+Firework/server/prof/web.sender()
+	/home/yehan/go/src/Firework/server/prof/web/main.go:49 +0xed
+created by Firework/server/prof/web.init.0
+	/home/yehan/go/src/Firework/server/prof/web/main.go:105 +0x4d
+
+goroutine 37 [chan receive]:
+github.com/yehan2002/watchdog.watchdog()
+	/home/yehan/go/src/github.com/yehan2002/watchdog/watchdog.go:33 +0x50
+created by github.com/yehan2002/watchdog.init.0
+	/home/yehan/go/src/github.com/yehan2002/watchdog/watchdog.go:27 +0x35
+
+goroutine 6 [IO wait, 2 minutes]:
+internal/poll.runtime_pollWait(0x7f64594f7d68, 0x72, 0x0)
+	/usr/local/go/src/runtime/netpoll.go:184 +0x55
+internal/poll.(*pollDesc).wait(0xc0002b4098, 0x72, 0x0, 0x0, 0x973b21)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Accept(0xc0002b4080, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/usr/local/go/src/internal/poll/fd_unix.go:384 +0x1f8
+net.(*netFD).accept(0xc0002b4080, 0xc000069d48, 0xc00005b180, 0x7f6459533008)
+	/usr/local/go/src/net/fd_unix.go:238 +0x42
+net.(*TCPListener).accept(0xc00000e1c0, 0xc000069d78, 0x417be8, 0x30)
+	/usr/local/go/src/net/tcpsock_posix.go:139 +0x32
+net.(*TCPListener).Accept(0xc00000e1c0, 0x934d20, 0xc00021c720, 0x8e55e0, 0xeedce0)
+	/usr/local/go/src/net/tcpsock.go:261 +0x47
+net/http.(*Server).Serve(0xc000232000, 0xa14f20, 0xc00000e1c0, 0x0, 0x0)
+	/usr/local/go/src/net/http/server.go:2896 +0x280
+net/http.(*Server).ListenAndServe(0xc000232000, 0x8c1ae0, 0xa02a40)
+	/usr/local/go/src/net/http/server.go:2825 +0xb7
+Firework/server/prof/web.setupServer.func1(0xc000232000)
+	/home/yehan/go/src/Firework/server/prof/web/main.go:91 +0x5f
+created by Firework/server/prof/web.setupServer
+	/home/yehan/go/src/Firework/server/prof/web/main.go:89 +0x125
+
+goroutine 39 [IO wait, 2 minutes]:
+internal/poll.runtime_pollWait(0x7f64594f7e38, 0x72, 0x0)
+	/usr/local/go/src/runtime/netpoll.go:184 +0x55
+internal/poll.(*pollDesc).wait(0xc0002b4018, 0x72, 0x0, 0x0, 0x973b21)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:87 +0x45
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:92
+internal/poll.(*FD).Accept(0xc0002b4000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/usr/local/go/src/internal/poll/fd_unix.go:384 +0x1f8
+net.(*netFD).accept(0xc0002b4000, 0xc00026ed50, 0xc00005b180, 0x7f6459533008)
+	/usr/local/go/src/net/fd_unix.go:238 +0x42
+net.(*TCPListener).accept(0xc00000e1a0, 0xc00026ed80, 0x417be8, 0x30)
+	/usr/local/go/src/net/tcpsock_posix.go:139 +0x32
+net.(*TCPListener).Accept(0xc00000e1a0, 0x934d20, 0xc00021c5a0, 0x8e55e0, 0xeedce0)
+	/usr/local/go/src/net/tcpsock.go:261 +0x47
+net/http.(*Server).Serve(0xc000268000, 0xa14f20, 0xc00000e1a0, 0x0, 0x0)
+	/usr/local/go/src/net/http/server.go:2896 +0x280
+net/http.(*Server).ListenAndServe(0xc000268000, 0xc000268000, 0x0)
+	/usr/local/go/src/net/http/server.go:2825 +0xb7
+net/http.ListenAndServe(0x97748b, 0xe, 0x0, 0x0, 0x0, 0xc000094058)
+	/usr/local/go/src/net/http/server.go:3081 +0x74
+created by main.main
+	/home/yehan/go/src/Firework/main.go:72 +0x7c
+
+goroutine 11 [chan receive, 2 minutes]:
+Firework/network.(*JavaNetIO).asyncWrite(0xc000284090)
+	/home/yehan/go/src/Firework/network/io.go:178 +0x82
+created by Firework/network.(*JavaNetIO).MakeAsync
+	/home/yehan/go/src/Firework/network/io.go:92 +0x70
+
+goroutine 54 [chan receive]:
+Firework/network.(*JavaNetIO).asyncWrite(0xc0000fcea0)
+	/home/yehan/go/src/Firework/network/io.go:178 +0x82
+created by Firework/network.(*JavaNetIO).MakeAsync
+	/home/yehan/go/src/Firework/network/io.go:92 +0x70
+        </code>
+    </pre>
+    <script>
+        /* PrismJS 1.19.0
+https://prismjs.com/download.html#themes=prism-solarizedlight&languages=clike+go */
+        var _self = "undefined" != typeof window ? window : "undefined" != typeof WorkerGlobalScope && self instanceof WorkerGlobalScope ? self : {},
+            Prism = function(u) {
+                var c = /\blang(?:uage)?-([\w-]+)\b/i,
+                    r = 0,
+                    C = {
+                        manual: u.Prism && u.Prism.manual,
+                        disableWorkerMessageHandler: u.Prism && u.Prism.disableWorkerMessageHandler,
+                        util: {
+                            encode: function e(r) {
+                                return r instanceof _ ? new _(r.type, e(r.content), r.alias) : Array.isArray(r) ? r.map(e) : r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\u00a0/g, " ")
+                            },
+                            type: function(e) {
+                                return Object.prototype.toString.call(e).slice(8, -1)
+                            },
+                            objId: function(e) {
+                                return e.__id || Object.defineProperty(e, "__id", {
+                                    value: ++r
+                                }), e.__id
+                            },
+                            clone: function n(e, t) {
+                                var a, r, i = C.util.type(e);
+                                switch (t = t || {}, i) {
+                                    case "Object":
+                                        if (r = C.util.objId(e), t[r]) return t[r];
+                                        for (var o in a = {}, t[r] = a, e) e.hasOwnProperty(o) && (a[o] = n(e[o], t));
+                                        return a;
+                                    case "Array":
+                                        return r = C.util.objId(e), t[r] ? t[r] : (a = [], t[r] = a, e.forEach(function(e, r) {
+                                            a[r] = n(e, t)
+                                        }), a);
+                                    default:
+                                        return e
+                                }
+                            },
+                            getLanguage: function(e) {
+                                for (; e && !c.test(e.className);) e = e.parentElement;
+                                return e ? (e.className.match(c) || [, "none"])[1].toLowerCase() : "none"
+                            },
+                            currentScript: function() {
+                                if ("undefined" == typeof document) return null;
+                                if ("currentScript" in document) return document.currentScript;
+                                try {
+                                    throw new Error
+                                } catch (e) {
+                                    var r = (/at [^(\r\n]*\((.*):.+:.+\)$/i.exec(e.stack) || [])[1];
+                                    if (r) {
+                                        var n = document.getElementsByTagName("script");
+                                        for (var t in n)
+                                            if (n[t].src == r) return n[t]
+                                    }
+                                    return null
+                                }
+                            }
+                        },
+                        languages: {
+                            extend: function(e, r) {
+                                var n = C.util.clone(C.languages[e]);
+                                for (var t in r) n[t] = r[t];
+                                return n
+                            },
+                            insertBefore: function(n, e, r, t) {
+                                var a = (t = t || C.languages)[n],
+                                    i = {};
+                                for (var o in a)
+                                    if (a.hasOwnProperty(o)) {
+                                        if (o == e)
+                                            for (var l in r) r.hasOwnProperty(l) && (i[l] = r[l]);
+                                        r.hasOwnProperty(o) || (i[o] = a[o])
+                                    } var s = t[n];
+                                return t[n] = i, C.languages.DFS(C.languages, function(e, r) {
+                                    r === s && e != n && (this[e] = i)
+                                }), i
+                            },
+                            DFS: function e(r, n, t, a) {
+                                a = a || {};
+                                var i = C.util.objId;
+                                for (var o in r)
+                                    if (r.hasOwnProperty(o)) {
+                                        n.call(r, o, r[o], t || o);
+                                        var l = r[o],
+                                            s = C.util.type(l);
+                                        "Object" !== s || a[i(l)] ? "Array" !== s || a[i(l)] || (a[i(l)] = !0, e(l, n, o, a)) : (a[i(l)] = !0, e(l, n, null, a))
+                                    }
+                            }
+                        },
+                        plugins: {},
+                        highlightAll: function(e, r) {
+                            C.highlightAllUnder(document, e, r)
+                        },
+                        highlightAllUnder: function(e, r, n) {
+                            var t = {
+                                callback: n,
+                                container: e,
+                                selector: 'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'
+                            };
+                            C.hooks.run("before-highlightall", t), t.elements = Array.prototype.slice.apply(t.container.querySelectorAll(t.selector)), C.hooks.run("before-all-elements-highlight", t);
+                            for (var a, i = 0; a = t.elements[i++];) C.highlightElement(a, !0 === r, t.callback)
+                        },
+                        highlightElement: function(e, r, n) {
+                            var t = C.util.getLanguage(e),
+                                a = C.languages[t];
+                            e.className = e.className.replace(c, "").replace(/\s+/g, " ") + " language-" + t;
+                            var i = e.parentNode;
+                            i && "pre" === i.nodeName.toLowerCase() && (i.className = i.className.replace(c, "").replace(/\s+/g, " ") + " language-" + t);
+                            var o = {
+                                element: e,
+                                language: t,
+                                grammar: a,
+                                code: e.textContent
+                            };
+
+                            function l(e) {
+                                o.highlightedCode = e, C.hooks.run("before-insert", o), o.element.innerHTML = o.highlightedCode, C.hooks.run("after-highlight", o), C.hooks.run("complete", o), n && n.call(o.element)
+                            }
+                            if (C.hooks.run("before-sanity-check", o), !o.code) return C.hooks.run("complete", o), void(n && n.call(o.element));
+                            if (C.hooks.run("before-highlight", o), o.grammar)
+                                if (r && u.Worker) {
+                                    var s = new Worker(C.filename);
+                                    s.onmessage = function(e) {
+                                        l(e.data)
+                                    }, s.postMessage(JSON.stringify({
+                                        language: o.language,
+                                        code: o.code,
+                                        immediateClose: !0
+                                    }))
+                                } else l(C.highlight(o.code, o.grammar, o.language));
+                            else l(C.util.encode(o.code))
+                        },
+                        highlight: function(e, r, n) {
+                            var t = {
+                                code: e,
+                                grammar: r,
+                                language: n
+                            };
+                            return C.hooks.run("before-tokenize", t), t.tokens = C.tokenize(t.code, t.grammar), C.hooks.run("after-tokenize", t), _.stringify(C.util.encode(t.tokens), t.language)
+                        },
+                        matchGrammar: function(e, r, n, t, a, i, o) {
+                            for (var l in n)
+                                if (n.hasOwnProperty(l) && n[l]) {
+                                    var s = n[l];
+                                    s = Array.isArray(s) ? s : [s];
+                                    for (var u = 0; u < s.length; ++u) {
+                                        if (o && o == l + "," + u) return;
+                                        var c = s[u],
+                                            g = c.inside,
+                                            f = !!c.lookbehind,
+                                            h = !!c.greedy,
+                                            d = 0,
+                                            m = c.alias;
+                                        if (h && !c.pattern.global) {
+                                            var p = c.pattern.toString().match(/[imsuy]*$/)[0];
+                                            c.pattern = RegExp(c.pattern.source, p + "g")
+                                        }
+                                        c = c.pattern || c;
+                                        for (var y = t, v = a; y < r.length; v += r[y].length, ++y) {
+                                            var k = r[y];
+                                            if (r.length > e.length) return;
+                                            if (!(k instanceof _)) {
+                                                if (h && y != r.length - 1) {
+                                                    if (c.lastIndex = v, !(S = c.exec(e))) break;
+                                                    for (var b = S.index + (f && S[1] ? S[1].length : 0), w = S.index + S[0].length, A = y, P = v, x = r.length; A < x && (P < w || !r[A].type && !r[A - 1].greedy); ++A)(P += r[A].length) <= b && (++y, v = P);
+                                                    if (r[y] instanceof _) continue;
+                                                    O = A - y, k = e.slice(v, P), S.index -= v
+                                                } else {
+                                                    c.lastIndex = 0;
+                                                    var S = c.exec(k),
+                                                        O = 1
+                                                }
+                                                if (S) {
+                                                    f && (d = S[1] ? S[1].length : 0);
+                                                    w = (b = S.index + d) + (S = S[0].slice(d)).length;
+                                                    var E = k.slice(0, b),
+                                                        N = k.slice(w),
+                                                        j = [y, O];
+                                                    E && (++y, v += E.length, j.push(E));
+                                                    var L = new _(l, g ? C.tokenize(S, g) : S, m, S, h);
+                                                    if (j.push(L), N && j.push(N), Array.prototype.splice.apply(r, j), 1 != O && C.matchGrammar(e, r, n, y, v, !0, l + "," + u), i) break
+                                                } else if (i) break
+                                            }
+                                        }
+                                    }
+                                }
+                        },
+                        tokenize: function(e, r) {
+                            var n = [e],
+                                t = r.rest;
+                            if (t) {
+                                for (var a in t) r[a] = t[a];
+                                delete r.rest
+                            }
+                            return C.matchGrammar(e, n, r, 0, 0, !1), n
+                        },
+                        hooks: {
+                            all: {},
+                            add: function(e, r) {
+                                var n = C.hooks.all;
+                                n[e] = n[e] || [], n[e].push(r)
+                            },
+                            run: function(e, r) {
+                                var n = C.hooks.all[e];
+                                if (n && n.length)
+                                    for (var t, a = 0; t = n[a++];) t(r)
+                            }
+                        },
+                        Token: _
+                    };
+
+                function _(e, r, n, t, a) {
+                    this.type = e, this.content = r, this.alias = n, this.length = 0 | (t || "").length, this.greedy = !!a
+                }
+                if (u.Prism = C, _.stringify = function r(e, n) {
+                        if ("string" == typeof e) return e;
+                        if (Array.isArray(e)) {
+                            var t = "";
+                            return e.forEach(function(e) {
+                                t += r(e, n)
+                            }), t
+                        }
+                        var a = {
+                                type: e.type,
+                                content: r(e.content, n),
+                                tag: "span",
+                                classes: ["token", e.type],
+                                attributes: {},
+                                language: n
+                            },
+                            i = e.alias;
+                        i && (Array.isArray(i) ? Array.prototype.push.apply(a.classes, i) : a.classes.push(i)), C.hooks.run("wrap", a);
+                        var o = "";
+                        for (var l in a.attributes) o += " " + l + '="' + (a.attributes[l] || "").replace(/"/g, "&quot;") + '"';
+                        return "<" + a.tag + ' class="' + a.classes.join(" ") + '"' + o + ">" + a.content + "</" + a.tag + ">"
+                    }, !u.document) return u.addEventListener && (C.disableWorkerMessageHandler || u.addEventListener("message", function(e) {
+                    var r = JSON.parse(e.data),
+                        n = r.language,
+                        t = r.code,
+                        a = r.immediateClose;
+                    u.postMessage(C.highlight(t, C.languages[n], n)), a && u.close()
+                }, !1)), C;
+                var e = C.util.currentScript();
+
+                function n() {
+                    C.manual || C.highlightAll()
+                }
+                if (e && (C.filename = e.src, e.hasAttribute("data-manual") && (C.manual = !0)), !C.manual) {
+                    var t = document.readyState;
+                    "loading" === t || "interactive" === t && e && e.defer ? document.addEventListener("DOMContentLoaded", n) : window.requestAnimationFrame ? window.requestAnimationFrame(n) : window.setTimeout(n, 16)
+                }
+                return C
+            }(_self);
+        "undefined" != typeof module && module.exports && (module.exports = Prism), "undefined" != typeof global && (global.Prism = Prism);
+        Prism.languages.clike = {
+            comment: [{
+                pattern: /(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)/,
+                lookbehind: !0
+            }, {
+                pattern: /(^|[^\\:])\/\/.*/,
+                lookbehind: !0,
+                greedy: !0
+            }],
+            string: {
+                pattern: /(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
+                greedy: !0
+            },
+            "class-name": {
+                pattern: /(\b(?:class|interface|extends|implements|trait|instanceof|new)\s+|\bcatch\s+\()[\w.\\]+/i,
+                lookbehind: !0,
+                inside: {
+                    punctuation: /[.\\]/
+                }
+            },
+            keyword: /\b(?:if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/,
+            boolean: /\b(?:true|false)\b/,
+            function: /\w+(?=\()/,
+            number: /\b0x[\da-f]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?/i,
+            operator: /[<>]=?|[!=]=?=?|--?|\+\+?|&&?|\|\|?|[?*/~^%]/,
+            punctuation: /[{}[\];(),.:]/
+        };
+        Prism.languages.go = Prism.languages.extend("clike", {
+            keyword: /\b(?:break|case|chan|const|continue|default|defer|else|fallthrough|for|func|go(?:to)?|if|import|interface|map|package|range|return|select|struct|switch|type|var)\b/,
+            builtin: /\b(?:bool|byte|complex(?:64|128)|error|float(?:32|64)|rune|string|u?int(?:8|16|32|64)?|uintptr|append|cap|close|complex|copy|delete|imag|len|make|new|panic|print(?:ln)?|real|recover)\b/,
+            boolean: /\b(?:_|iota|nil|true|false)\b/,
+            operator: /[*\/%^!=]=?|\+[=+]?|-[=-]?|\|[=|]?|&(?:=|&|\^=?)?|>(?:>=?|=)?|<(?:<=?|=|-)?|:=|\.\.\./,
+            number: /(?:\b0x[a-f\d]+|(?:\b\d+\.?\d*|\B\.\d+)(?:e[-+]?\d+)?)i?/i,
+            string: {
+                pattern: /(["'`])(?:\\[\s\S]|(?!\1)[^\\])*\1/,
+                greedy: !0
+            }
+        }), delete Prism.languages.go["class-name"];
+    </script>
+</body></html>
