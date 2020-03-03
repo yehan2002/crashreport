@@ -19,7 +19,7 @@ import (
 	"github.com/google/pprof/driver"
 	"github.com/pkg/browser"
 	"github.com/yehan2002/crashreport/internal"
-	"github.com/yehan2002/crashreport/internal/html"
+	"github.com/yehan2002/crashreport/internal/ui/html"
 )
 
 //WebUI ui
