@@ -1,0 +1,20 @@
+<html>
+<body>
+<pre>
+Memory usage : {{Bytes .Mem}}
+
+Last GC pause  : {{Ns .LastGcPause}}
+Total GC pause : {{Ns .GcPauseNs}}
+GC CPU usage   : {{FloatFormat64 .GcCPU}}%
+
+Current Threads     : {{.Threads}}
+Useable CPU cores   : {{.MaxCPU}}
+Current Goroutines  : {{.Goroutines}}
+Available CPU cores : {{.CPU}}
+
+Started at {{TryGetTime .TimeStart .Time .TimeRunning}} (Uptime {{ToString .TimeRunning}})
+Compiled using {{.Compiler}} version {{.GoVersion}} for {{.OS}}/{{.Arch}}
+</pre>
+<hr style="border-width: 1px;border-bottom: hidden;">
+</body>
+</html>

@@ -1,4 +1,4 @@
-package internal
+package ui
 
 import (
 	"github.com/google/pprof/driver"

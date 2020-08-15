@@ -1,12 +1,15 @@
 package ui
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
-type ui struct{ p *WebUI }
+type profUI struct{}
 
-func (*ui) IsTerminal() bool                             { return false }
-func (*ui) SetAutoComplete(complete func(string) string) {}
-func (*ui) WantBrowser() bool                            { return false }
-func (*ui) ReadLine(prompt string) (string, error)       { return "", nil }
-func (u *ui) Print(v ...interface{})                     {}
-func (u *ui) PrintErr(v ...interface{})                  { u.p.err = fmt.Errorf(fmt.Sprint(v...)) }
+func (*profUI) IsTerminal() bool                             { return false }
+func (*profUI) SetAutoComplete(complete func(string) string) {}
+func (*profUI) WantBrowser() bool                            { return false }
+func (*profUI) ReadLine(prompt string) (string, error)       { return "", nil }
+func (u *profUI) Print(v ...interface{})                     {}
+func (u *profUI) PrintErr(v ...interface{})                  { fmt.Fprint(os.Stderr, v...) }

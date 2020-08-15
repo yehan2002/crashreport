@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<style>
+			#menuButton {
+				background-color: transparent;
+				border: thin solid gainsboro;
+				font-size: 1em;
+				position: fixed;
+				display: block;
+				bottom: 12;
+				left: 12;
+				padding: 5px;
+				color: rgba(0, 0, 0, 0.9);
+				text-decoration: none;
+				user-select: none;
+			}
+			html,body,#frame {
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+				border: none;
+			}
+			html{
+				overflow: hidden;
+			}
+			.dropbtn {
+				background-color: transparent;
+				border: thin solid gainsboro;
+				font-size: 14px;
+				position: fixed;
+				display: block;
+				bottom: 12px;
+				left: 12px;
+				padding: 5px;
+				color: rgba(0, 0, 0, 0.8);
+				text-decoration: none;
+				user-select: none;
+			}
+			.dropdown {
+				position: relative;
+				display: inline-block;
+			}
+			.dropdown-content {
+				display: none;
+				position: fixed;
+				font-size: 13px;
+				bottom: 40px;
+				left: 12px;
+				background-color: rgba(255,255,255,1);
+				box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);z-index: 1;}
+			.dropdown-content a {
+				color: black;
+				color: rgba(0, 0, 0, 0.8);
+				padding: 11px 13px;
+				text-decoration: none;
+				display: block;
+			}
+			.dropdown-content a:hover {
+				background-color: rgba(250,250,250,1);
+			}
+			.dropdown:hover .dropdown-content {
+				display: block;
+			}
+			.dropdown:hover .dropbtn {
+				background-color: rgba(250,250,250,1);
+			}
+		</style>
+	</head>
+	<body>
+		<iframe src="" frameborder="0" id="frame" name="frame"></iframe>
+		<div class="dropdown">
+			<button class="dropbtn">View</button>
+			<div class="dropdown-content">
+				{{range $page := .}}
+					<a href="{{$page.URL}}" target="frame" class="{{$page.Class}}">{{$page.Name}}</a>
+				{{end}}
+			</div>
+			<script>
+			var frame = document.getElementById("frame");
+			var shouldReload = false;
+
+			function getInitialPage(){
+				if (window.location.hash !== ""){
+					var url =  window.location.origin  + decodeURIComponent(window.location.hash).replace("#","",1);
+					fetch(url).catch(()=> {
+						window.location.hash = "";
+						getInitialPage();
+					}).then((w) => {
+						if (w.ok){
+							frame.src = url;
+							frame.onload = setHash
+						} else {
+							window.location.hash = "";
+							getInitialPage();
+						}
+					})
+				} else{
+					var all = document.getElementsByClassName("dropdown-content")[0];
+					var url = all.children[0];
+
+					url = getElementOrDefault(all, url, "stacktrace")
+					url = getElementOrDefault(all, url, "Info")
+
+					frame.src = url.href;
+					frame.onload = setHash;
+				}
+			}
+
+			getInitialPage()
+
+			function getElementOrDefault(container, def, classname){
+				var tmp = container.getElementsByClassName(classname)
+				if (tmp.length === 0){
+					return def;
+				}
+				return tmp[0]
+			}
+		
+			function setHash(){
+				document.title = frame.contentDocument.title;
+				window.location.hash = encodeURIComponent(frame.contentDocument.location.pathname + frame.contentDocument.location.search);
+			}
+				
+			function checkReload(){
+				fetch(window.location.origin+"/ok").then((e)=>{
+					setTimeout(createWebsocket,100);
+				}).catch((e)=>{
+					setTimeout(checkReload, 1000);
+				})
+			}
+
+			function createWebsocket(){
+				if (shouldReload){
+					window.location.reload();
+				}
+				w = new WebSocket("ws://"+window.location.host+"/websocket");
+				w.onclose = checkReload;
+				w.onmessage = ()=>{window.location.reload();}
+				w.onopen = ()=>{shouldReload = true;}
+			}
+
+			checkReload()
+			
+			</script>
+		</div>
+	</body>
+</html>

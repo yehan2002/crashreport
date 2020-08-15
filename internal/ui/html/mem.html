@@ -1,0 +1,32 @@
+<html>
+<body>
+<pre>
+Heap Allocations       : {{Bytes .Alloc}}
+Total Allocations      : {{Bytes .TotalAlloc}}
+Total Acquired Memory  : {{Bytes .Sys}}
+
+Heap Objects Live      : {{Sub .Mallocs .Frees}}
+Heap Objects Freed     : {{.Frees}}
+Heap Objects total     : {{.Mallocs}}
+
+Heap Memory Allocation : {{Bytes .HeapAlloc}}
+Heap Memory Used       : {{Bytes .HeapInuse}}
+Heap Memory Unused     : {{Sub .HeapIdle .HeapReleased | Bytes}}
+Heap Memory Reserved   : {{Bytes .HeapSys}}
+Heap Memory Released   : {{Bytes .HeapReleased}}
+
+Stack Memory Used      : {{Bytes .StackInuse}}
+Stack Memory Reserved  : {{Bytes .StackSys}}
+
+Next GC At             : {{Bytes .NextGC}}
+GC CPU Usage Fraction  : {{FloatFormat64 .GCCPUFraction}}%
+Completed GC Cycles    : {{.NumGC}}
+Forced GC Cycles       : {{.NumForcedGC}}
+GC Pause Total	       : {{Ns .PauseTotalNs}}
+GC Pause Average       : {{Div .PauseTotalNs .NumGC | Ns}}
+Last GC                : {{Time .LastGC}}
+
+GC Pauses  {{UnRingBuffer .PauseNs .NumGC}}
+</pre>
+</body>
+</html>
