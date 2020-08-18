@@ -11,8 +11,8 @@ import (
 	"runtime/pprof"
 )
 
-//Header the shebang line to be used for making the file executable
-var Header = `#!/usr/bin/env crashreport
+//Header the header line to be used for the file.
+var Header = `crashreport
 Use github.com/yehan2002/crashreport or open this file with any zip file viewer.
 `
 
