@@ -75,14 +75,14 @@ func (u *UI) Reload(data *internal.Data) {
 
 	if data.SysInfo != nil {
 		mux.HandleFunc("/info", func(w http.ResponseWriter, _ *http.Request) {
-			fmt.Println(html.Template.Lookup("sys.html").Execute(w, data.SysInfo))
+			html.Template.Lookup("sys.html").Execute(w, data.SysInfo)
 		})
 		pages = append(pages, &page{"Info", template.URL("/info"), "info"})
 	}
 
 	if data.Memstat != nil {
 		mux.HandleFunc("/memory", func(w http.ResponseWriter, _ *http.Request) {
-			fmt.Println(html.Template.Lookup("mem.html").Execute(w, data.Memstat))
+			html.Template.Lookup("mem.html").Execute(w, data.Memstat)
 		})
 		pages = append(pages, &page{"Memory", template.URL("/memory"), "memory"})
 	}

@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 	"github.com/yehan2002/crashreport/internal"
 	"github.com/yehan2002/crashreport/internal/ui"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
@@ -28,7 +30,7 @@ func main() {
 		},
 	}
 	port = cmd.Flags().IntP("port", "p", 0, "The port to use")
-	openBrowser = cmd.Flags().BoolP("browser", "b", false, "Open the result in a browser")
+	openBrowser = cmd.Flags().BoolP("browser", "b", !terminal.IsTerminal(int(os.Stdout.Fd())), "Open the result in a browser")
 	cmd.Execute()
 }
 
@@ -44,11 +46,10 @@ func run(file string, port int, openBrowser bool) {
 
 	go func() { panicErr(<-watcher.Errors) }()
 	go func() {
-		for v := range watcher.Events {
+		for range watcher.Events {
 			data, err := internal.Read(file)
 			if err == nil {
 				ui.Reload(data)
-				fmt.Println(v)
 			}
 		}
 	}()
