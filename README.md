@@ -7,11 +7,14 @@ A Simple package for writing crash reports.
 ### Creating crash reports
 
 ```golang
-f,err := os.Create(filename)
-if err == nil{
-    crashreport.Crash("invalid texture loaded", f)
-    f.Close()
+func LoadTexture(path string){
+    err := TextureManager.Load(path)
+    if err == nil{
+      report := crashreport.Crash("Invalid texture loaded").Include(path)
+      report.WriteTo("./crashreport.crash")
+    }
 }
+
 ```
 
 ### Viewing crash reports
