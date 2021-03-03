@@ -68,21 +68,21 @@ func (u *UI) Reload(data *internal.Data) {
 
 	if len(data.Stack) != 0 || len(data.Reason) != 0 {
 		mux.HandleFunc("/stacktrace", func(w http.ResponseWriter, _ *http.Request) {
-			html.Template.Lookup("stack.html").Execute(w, data)
+			Template.Lookup("stack.html").Execute(w, data)
 		})
 		pages = append(pages, &page{"Stack Trace", template.URL("/stacktrace"), "stacktrace"})
 	}
 
 	if data.SysInfo != nil {
 		mux.HandleFunc("/info", func(w http.ResponseWriter, _ *http.Request) {
-			html.Template.Lookup("sys.html").Execute(w, data.SysInfo)
+			Template.Lookup("sys.html").Execute(w, data.SysInfo)
 		})
 		pages = append(pages, &page{"Info", template.URL("/info"), "info"})
 	}
 
 	if data.Memstat != nil {
 		mux.HandleFunc("/memory", func(w http.ResponseWriter, _ *http.Request) {
-			html.Template.Lookup("mem.html").Execute(w, data.Memstat)
+			Template.Lookup("mem.html").Execute(w, data.Memstat)
 		})
 		pages = append(pages, &page{"Memory", template.URL("/memory"), "memory"})
 	}
@@ -103,9 +103,11 @@ func (u *UI) Reload(data *internal.Data) {
 			w.WriteHeader(404)
 			w.Write([]byte("Not Found"))
 		} else {
-			html.Template.Lookup("main.html").Execute(w, pages)
+			Template.Lookup("main.html").Execute(w, pages)
 		}
 	})
+
+	mux.Handle("/assets/", http.FileServer(http.FS(html.Resources)))
 
 	u.serverMux.Lock()
 	u.server.Handler = mux

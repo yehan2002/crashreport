@@ -1,4 +1,4 @@
-package html
+package ui
 
 import (
 	"html/template"
@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/yehan2002/crashreport/internal/ui/html"
 )
 
 //Template the page template
@@ -16,6 +18,9 @@ var Template = template.New("").Funcs(template.FuncMap{
 	"Bytes":         func(i uint64) string { return string(toBytes(float64(i))) },
 	"Bytes32":       func(i uint32) string { return string(toBytes(float64(i))) },
 	"ToString":      func(v reflect.Value) string { return v.MethodByName("String").Call(nil)[0].String() },
+	"Time":          func(t uint64) string { return time.Unix(0, int64(t)).String() },
+	"Sub":           func(i, i2 uint64) uint64 { return i - i2 },
+	"Div":           func(i uint64, i2 uint32) uint64 { return i / uint64(i2) },
 	"TryGetTime": func(t1, t2 time.Time, d time.Duration) string {
 		if !t1.IsZero() {
 			return t1.String()
@@ -41,15 +46,12 @@ var Template = template.New("").Funcs(template.FuncMap{
 		}
 		return ret
 	},
-	"Time": func(t uint64) string {
-		return time.Unix(0, int64(t)).String()
-	},
-	"Sub": func(i, i2 uint64) uint64 { return i - i2 },
-	"Div": func(i uint64, i2 uint32) uint64 {
-		return i / uint64(i2)
-	},
 },
 )
+
+func init() {
+	template.Must(Template.ParseFS(html.Resources, "*.html"))
+}
 
 func toBytes(v float64) []byte {
 	var b []byte
