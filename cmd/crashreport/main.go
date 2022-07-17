@@ -1,37 +1,35 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/spf13/cobra"
 	"github.com/yehan2002/crashreport/internal"
 	"github.com/yehan2002/crashreport/internal/ui"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 func main() {
-	var port *int
-	var openBrowser *bool
-	cmd := cobra.Command{
-		Use:   "crashreport",
-		Short: "View crash reports",
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
-				return fmt.Errorf("No files specified")
-			} else if len(args) > 1 {
-				return fmt.Errorf("Expected only one file but got %d", len(args))
-			}
-			return nil
-		},
-		Run: func(cmd *cobra.Command, args []string) {
-			run(args[0], *port, *openBrowser)
-		},
+	var port uint
+	var openBrowser bool
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
+		flag.CommandLine.PrintDefaults()
 	}
-	port = cmd.Flags().IntP("port", "p", 0, "The port to use")
-	openBrowser = cmd.Flags().BoolP("browser", "b", !terminal.IsTerminal(int(os.Stdout.Fd())), "Open the result in a browser")
-	cmd.Execute()
+
+	flag.UintVar(&port, "port", 0, "The port to use")
+	flag.BoolVar(&openBrowser, "browser", term.IsTerminal(int(os.Stdout.Fd())), "Open the result in a browser")
+	flag.Parse()
+	args := flag.Args()
+	if len(args) == 0 {
+		fmt.Printf("No files specified\n")
+		flag.Usage()
+	} else if len(args) > 1 {
+		fmt.Printf("Expected only one file but got %d\n", len(args))
+		flag.Usage()
+	}
 }
 
 func run(file string, port int, openBrowser bool) {
