@@ -18,49 +18,49 @@ import (
 const maxSize = 1024 * 1024 // 1MB
 
 // Read reads a crash report from the zip file
-func Read(filename string) (d *CrashReport, err error) {
-	data := &CrashReport{}
+func Read(r io.Reader) (d *CrashReport, err error) {
+	report := &CrashReport{}
 
-	buf, err := os.ReadFile(filename)
+	buf, err := io.ReadAll(r)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read file %s: %w", filename, err)
+		return nil, fmt.Errorf("unable to read file: %w", err)
 	}
 
 	zr, err := zip.NewReader(bytes.NewReader(buf), int64(len(buf)))
 	if err != nil {
-		return nil, fmt.Errorf("unable read zip file %s: %w", filename, err)
+		return nil, fmt.Errorf("unable read zip file: %w", err)
 	}
 
-	if err = data.readToString(zr, "reason", &d.Reason); err != nil {
+	if err = report.readToString(zr, "reason", &d.Reason); err != nil {
 		return nil, err
 	}
 
-	if err = data.readToString(zr, "stack", &d.Stack); err != nil {
+	if err = report.readToString(zr, "stack", &d.Stack); err != nil {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "build.json", &data.Build); err != nil {
+	if err = report.readJSON(zr, "build.json", &report.Build); err != nil {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "system.json", &data.SysInfo); err != nil {
+	if err = report.readJSON(zr, "system.json", &report.SysInfo); err != nil {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "memstats.json", &data.Memstats); err != nil {
+	if err = report.readJSON(zr, "memstats.json", &report.Memstats); err != nil {
 		return nil, err
 	}
 
-	if data.Files, err = fs.Glob(zr, "include/*"); err != nil {
+	if report.Files, err = fs.Glob(zr, "include/*"); err != nil {
 		return nil, fmt.Errorf("Unable to get list of included files: %w", err)
 	}
 
 	// read all profiles in the zip file.
-	if err = data.readProfiles(zr); err != nil {
+	if err = report.readProfiles(zr); err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	return report, nil
 }
 
 // readProfiles reads all profile files in the given fs
