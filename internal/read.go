@@ -39,11 +39,11 @@ func Read(filename string) (d *CrashReport, err error) {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "build.json", data.Build); err != nil {
+	if err = data.readJSON(zr, "build.json", &data.Build); err != nil {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "system.json", data.SysInfo); err != nil {
+	if err = data.readJSON(zr, "system.json", &data.SysInfo); err != nil {
 		return nil, err
 	}
 
@@ -83,6 +83,7 @@ func (c *CrashReport) readProfiles(f fs.FS) error {
 	return nil
 }
 
+// readJSON reads and parses the given file into dst.
 func (c *CrashReport) readJSON(f fs.FS, name string, dst interface{}) error {
 	buf, err := c.readFile(f, name)
 	if err != nil {
@@ -90,8 +91,15 @@ func (c *CrashReport) readJSON(f fs.FS, name string, dst interface{}) error {
 	}
 
 	v := reflect.ValueOf(dst)
-	if v.IsNil() {
-		v.Set(reflect.Zero(v.Type().Elem()))
+
+	if v.Kind() == reflect.Pointer {
+		// allocate a new value if dst is a pointer to a nil pointer.
+		if elem := v.Elem(); elem.Kind() == reflect.Pointer && elem.IsNil() {
+			zero := reflect.New(elem.Elem().Type())
+			elem.Set(zero)
+			dst = zero.Interface()
+		}
+
 	}
 
 	err = json.Unmarshal(buf, dst)
@@ -102,6 +110,7 @@ func (c *CrashReport) readJSON(f fs.FS, name string, dst interface{}) error {
 	return nil
 }
 
+// readToString reads the given file into dst.
 func (c *CrashReport) readToString(f fs.FS, name string, dst *string) error {
 	buf, err := c.readFile(f, name)
 	if err != nil {
