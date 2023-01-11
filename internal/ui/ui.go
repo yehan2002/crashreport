@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -46,8 +47,25 @@ type page struct {
 
 var upgrader = websocket.Upgrader{EnableCompression: false}
 
-// New Create a new ui
-func New(data *internal.CrashReport, port int, browser bool) *UI {
+// Run runs the web ui
+func Run(r io.Reader, port int, openBrowser bool) error {
+	data, err := internal.Read(r)
+	if err != nil {
+		return err
+	}
+
+	ui := newUI(data, port, openBrowser)
+
+	exit, err := ui.Run()
+	if err != nil {
+		return err
+	}
+	<-exit
+	return nil
+}
+
+// newUI Create a newUI ui
+func newUI(data *internal.CrashReport, port int, browser bool) *UI {
 	ui := &UI{port: port, browser: browser, server: &http.Server{}}
 	ui.Reload(data)
 	return ui

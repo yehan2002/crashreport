@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yehan2002/crashreport/internal"
 	"github.com/yehan2002/crashreport/internal/ui"
 	"golang.org/x/term"
 )
@@ -13,40 +12,32 @@ import (
 func main() {
 	var port uint
 	var openBrowser bool
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
-		flag.CommandLine.PrintDefaults()
-	}
-
 	flag.UintVar(&port, "port", 0, "The port to use")
-	flag.BoolVar(&openBrowser, "browser", term.IsTerminal(int(os.Stdout.Fd())), "Open the result in a browser")
+	flag.BoolVar(&openBrowser, "browser", !term.IsTerminal(int(os.Stdout.Fd())), "Open the result in a browser")
 	flag.Parse()
-	args := flag.Args()
-	if len(args) == 0 {
-		fmt.Printf("No files specified\n")
+
+	fileName := flag.Arg(0)
+	if len(fileName) == 0 {
+		fmt.Fprintf(flag.CommandLine.Output(), "File was not specified")
 		flag.Usage()
-	} else if len(args) > 1 {
-		fmt.Printf("Expected only one file but got %d\n", len(args))
-		flag.Usage()
+		return
 	}
-	run(args[0], int(port), openBrowser)
-}
 
-func run(file string, port int, openBrowser bool) {
-	data, err := internal.Read(file)
-	panicErr(err)
+	if flag.NArg() > 1 {
+		fmt.Fprintf(flag.CommandLine.Output(), "Expected exactly one argument got %d", flag.NArg())
+		flag.Usage()
+		return
+	}
 
-	ui := ui.New(data, port, openBrowser)
-
-	panicErr(err)
-
-	exit, err := ui.Run()
-	panicErr(err)
-	<-exit
-}
-
-func panicErr(err error) {
+	file, err := os.Open(fileName)
 	if err != nil {
-		panic(err)
+		fmt.Printf("Unable to open %s: %s", fileName, err)
+		return
+	}
+	defer file.Close()
+
+	err = ui.Run(file, int(port), openBrowser)
+	if err != nil {
+		fmt.Fprint(flag.CommandLine.Output(), err.Error())
 	}
 }
