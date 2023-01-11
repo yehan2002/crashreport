@@ -1,21 +1,27 @@
-package ui
+package internal
 
 import (
-	"github.com/google/pprof/driver"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/google/pprof/profile"
 )
+
+type profUI struct{}
+
+func (*profUI) IsTerminal() bool                             { return false }
+func (*profUI) SetAutoComplete(complete func(string) string) {}
+func (*profUI) WantBrowser() bool                            { return false }
+func (*profUI) ReadLine(prompt string) (string, error)       { return "", nil }
+func (u *profUI) Print(v ...interface{})                     {}
+func (u *profUI) PrintErr(v ...interface{})                  { fmt.Fprint(os.Stderr, v...) }
 
 type fakeFlags struct {
 	file string
 }
 
-func (*fakeFlags) Bool(o string, d bool, c string) *bool {
-	var s bool = d
-	switch o {
-	case "no_browser":
-		s = true
-	}
-	return &s
-}
+func (*fakeFlags) Bool(o string, d bool, c string) *bool { return new(bool) }
 
 func (*fakeFlags) String(o, d, c string) *string {
 	var s string = d
@@ -37,7 +43,8 @@ func (*fakeFlags) ExtraUsage() string                                   { return
 func (*fakeFlags) AddExtraUsage(eu string)                              {}
 func (f *fakeFlags) Parse(usage func()) []string                        { return []string{f.file} }
 
-// NewFakeFlag flag
-func NewFakeFlag(file string) driver.FlagSet {
-	return &fakeFlags{file}
+type fetcher struct{ P *profile.Profile }
+
+func (f *fetcher) Fetch(src string, duration, timeout time.Duration) (*profile.Profile, string, error) {
+	return f.P, "", nil
 }

@@ -8,70 +8,62 @@ import (
 	"github.com/yehan2002/crashreport/internal"
 )
 
-//Profiles the profiles to be included in the report
-type Profiles uint8
+// Profiles the profiles to be included in the report
+type Profiles = internal.Profiles
 
-//Profiles
+// Profiles
 const (
-	ProfileHeap Profiles = 1 << iota
-	ProfileBlock
-	ProfileMutex
-	ProfileAllocs
-	ProfileGoroutines
-	ProfileThreadCreate
+	ProfileHeap         Profiles = internal.ProfileHeap
+	ProfileBlock                 = internal.ProfileBlock
+	ProfileMutex                 = internal.ProfileMutex
+	ProfileAllocs                = internal.ProfileAllocs
+	ProfileGoroutines            = internal.ProfileGoroutines
+	ProfileThreadCreate          = internal.ProfileThreadCreate
 
 	ProfileAll = ProfileHeap | ProfileBlock | ProfileMutex | ProfileAllocs | ProfileGoroutines | ProfileThreadCreate
 )
 
-var profiles = [...]string{"heap", "block", "mutex", "allocs", "goroutine", "threadcreate"}
+// CrashReport a crash report.
+// The Write/WriteTo methods may be used multiple times.
+type CrashReport struct{ c internal.Config }
 
-//CrashReport a crash report.
-//The Write/WriteTo methods may be used multiple times.
-type CrashReport struct {
-	reason    []string
-	profiles  map[string]int
-	files     []string
-	noStack   bool
-	noSysInfo bool
-	mem       runtime.MemStats
-}
-
-//NewCrashReport creates a new crash report
+// NewCrashReport creates a new crash report
 func NewCrashReport(reason ...string) *CrashReport {
-	c := &CrashReport{reason: reason, profiles: map[string]int{}}
-	runtime.ReadMemStats(&c.mem)
+	c := &CrashReport{c: internal.Config{Reason: reason, Profiles: map[string]struct{}{}}}
+	runtime.ReadMemStats(&c.c.MemStats)
 	return c
 }
 
-//Include includes the given profiles in the crash report
+// Include includes the given profiles in the crash report
 func (c *CrashReport) Include(p Profiles) *CrashReport {
-	for i := 0; i < len(profiles); i++ {
-		if p&0x1 == 1 {
-			c.profiles[profiles[i]] = 1
-		}
-		p = p >> 1
-	}
+	p.Add(&c.c)
 	return c
 }
 
-//IncludeCustom includes a custom profile
-func (c *CrashReport) IncludeCustom(name string) *CrashReport { c.profiles[name] = 1; return c }
-
-//IncludeFile includes the given file in the crash report.
-//Any errors when including these files are silently ignored.
-func (c *CrashReport) IncludeFile(file string) *CrashReport {
-	c.files = append(c.files, file)
+// IncludeCustom includes a custom profile
+func (c *CrashReport) IncludeCustom(name string) *CrashReport {
+	c.c.Profiles[name] = struct{}{}
 	return c
 }
 
-//NoStack excludes the stack from the crash report
-func (c *CrashReport) NoStack() *CrashReport { c.noStack = true; return c }
+// IncludeFile includes the given file in the crash report.
+// Any errors when including these files are silently ignored.
+func (c *CrashReport) IncludeFile(path string) *CrashReport {
+	c.c.Files = append(c.c.Files, path)
+	return c
+}
 
-//NoSysInfo excludes system info from the crash report
-func (c *CrashReport) NoSysInfo() *CrashReport { c.noSysInfo = true; return c }
+// NoStack excludes the stack from the crash report
+func (c *CrashReport) NoStack() *CrashReport { c.c.NoStack = true; return c }
 
-//Reason appends the given strings to the reason
-func (c *CrashReport) Reason(s ...string) *CrashReport { c.reason = append(c.reason, s...); return c }
+// NoSysInfo excludes system info from the crash report
+func (c *CrashReport) NoSysInfo() *CrashReport { c.c.NoSysInfo = true; return c }
+
+// Reason appends the given strings to the reason
+func (c *CrashReport) Reason(s ...string) *CrashReport {
+	c.c.Reason = append(c.c.Reason, s...)
+	return c
+}
 
 func (c *CrashReport) Write(w io.Writer) (err error) {
 	defer func() {
@@ -85,24 +77,24 @@ func (c *CrashReport) Write(w io.Writer) (err error) {
 	}()
 
 	cw := internal.CreateWriter(w)
-	cw.Reason(c.reason)
-	for name := range c.profiles {
+	cw.Reason(c.c.Reason)
+	for name := range c.c.Profiles {
 		cw.Profile(name)
 	}
-	for _, file := range c.files {
+	for _, file := range c.c.Files {
 		cw.File(file)
 	}
-	if !c.noStack {
+	if !c.c.NoStack {
 		cw.Stack()
 	}
-	if !c.noSysInfo {
+	if !c.c.NoSysInfo {
 		cw.SysInfo()
 	}
 	cw.Close()
 	return
 }
 
-//WriteTo writes the crash report to the given file
+// WriteTo writes the crash report to the given file
 func (c *CrashReport) WriteTo(filename string) error {
 	f, err := os.Create(filename)
 	if err != nil {

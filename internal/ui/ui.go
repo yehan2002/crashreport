@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net"
@@ -13,7 +14,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/google/pprof/driver"
+	"github.com/DataDog/gostackparse"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/browser"
 	"github.com/yehan2002/crashreport/internal"
@@ -22,7 +23,7 @@ import (
 
 var exitWG sync.WaitGroup
 
-//UI ui
+// UI ui
 type UI struct {
 	port    int
 	browser bool
@@ -45,25 +46,20 @@ type page struct {
 
 var upgrader = websocket.Upgrader{EnableCompression: false}
 
-//New Create a new ui
+// New Create a new ui
 func New(data *internal.Data, port int, browser bool) *UI {
 	ui := &UI{port: port, browser: browser, server: &http.Server{}}
 	ui.Reload(data)
 	return ui
 }
 
-//Reload reload the page
+// Reload reload the page
 func (u *UI) Reload(data *internal.Data) {
 	mux := http.NewServeMux()
 	pages := []*page{}
 	for _, prof := range data.Profiles {
-		driver.PProf(&driver.Options{HTTPServer: func(d *driver.HTTPServerArgs) error {
-			for path, handler := range d.Handlers {
-				mux.Handle("/profile/"+prof.URL+path, handler)
-			}
-			return nil
-		}, UI: &profUI{}, Flagset: &fakeFlags{}, Fetch: prof})
-		pages = append(pages, &page{prof.Name, template.URL("/profile/" + prof.URL), prof.URL})
+		prof.Register(mux)
+		pages = append(pages, &page{prof.Name(), template.URL("/profile/" + prof.URL()), prof.URL()})
 	}
 
 	if len(data.Stack) != 0 || len(data.Reason) != 0 {
@@ -72,7 +68,19 @@ func (u *UI) Reload(data *internal.Data) {
 		})
 		pages = append(pages, &page{"Stack Trace", template.URL("/stacktrace"), "stacktrace"})
 	}
-
+	if len(data.Stack) != 0 || len(data.Reason) != 0 {
+		mux.HandleFunc("/stacktraceJSON", func(w http.ResponseWriter, _ *http.Request) {
+			fr, errs := gostackparse.Parse(strings.NewReader(data.Stack))
+			if errs != nil {
+				panic(errs)
+			}
+			err := json.NewEncoder(w).Encode(fr)
+			if err != nil {
+				panic(err)
+			}
+		})
+		pages = append(pages, &page{"Stack Trace JSON", template.URL("/stacktraceJSON"), "stacktrace JSON"})
+	}
 	if data.SysInfo != nil {
 		mux.HandleFunc("/info", func(w http.ResponseWriter, _ *http.Request) {
 			Template.Lookup("sys.html").Execute(w, data.SysInfo)
@@ -80,9 +88,9 @@ func (u *UI) Reload(data *internal.Data) {
 		pages = append(pages, &page{"Info", template.URL("/info"), "info"})
 	}
 
-	if data.Memstat != nil {
+	if data.Memstats != nil {
 		mux.HandleFunc("/memory", func(w http.ResponseWriter, _ *http.Request) {
-			Template.Lookup("mem.html").Execute(w, data.Memstat)
+			Template.Lookup("mem.html").Execute(w, data.Memstats)
 		})
 		pages = append(pages, &page{"Memory", template.URL("/memory"), "memory"})
 	}
@@ -122,7 +130,7 @@ func (u *UI) Reload(data *internal.Data) {
 	u.serverMux.Unlock()
 }
 
-//Run run the ui
+// Run run the ui
 func (u *UI) Run() (exit chan error, err error) {
 	if !atomic.CompareAndSwapUint32(&u.run, 0, 1) {
 		panic("Cannot call Run more than once")
@@ -147,12 +155,12 @@ func (u *UI) Run() (exit chan error, err error) {
 	return
 }
 
-//Exit returns when the server exits
+// Exit returns when the server exits
 func (u *UI) Exit() error {
 	return nil
 }
 
-//Stop stop the server
+// Stop stop the server
 func (u *UI) Stop() (err error) {
 	u.stop.Do(func() {
 		err = u.server.Close()

@@ -6,9 +6,20 @@ import (
 	"time"
 )
 
+// startTime the time the program started running at
 var startTime = time.Now()
 
-//SysInfo system info
+type CrashReport struct {
+	Profiles []*Profile
+	SysInfo  *SysInfo
+	Memstats *runtime.MemStats
+	Build    *debug.BuildInfo
+
+	Reason string
+	Stack  string
+}
+
+// SysInfo system info
 type SysInfo struct {
 	Arch      string
 	OS        string
@@ -25,20 +36,13 @@ type SysInfo struct {
 	LastGcPause uint64
 	GcCPU       float64
 
-	buildInfo *debug.BuildInfo
-	memStats  *runtime.MemStats
-
 	Time        time.Time
 	TimeStart   time.Time
 	TimeRunning time.Duration
 }
 
 func getSysInfo() *SysInfo {
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
 	threads, _ := runtime.ThreadCreateProfile([]runtime.StackRecord{})
-
-	build, _ := debug.ReadBuildInfo()
 	return &SysInfo{
 		Arch:       runtime.GOARCH,
 		OS:         runtime.GOOS,
@@ -51,14 +55,6 @@ func getSysInfo() *SysInfo {
 
 		Time:        time.Now(),
 		TimeStart:   startTime,
-		TimeRunning: time.Now().Sub(startTime),
-
-		Mem:         m.Sys,
-		GcPauseNs:   m.PauseTotalNs,
-		LastGcPause: m.PauseNs[(m.NumGC+255)%256],
-		GcCPU:       m.GCCPUFraction,
-
-		buildInfo: build,
-		memStats:  &m,
+		TimeRunning: time.Since(startTime),
 	}
 }

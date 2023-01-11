@@ -30,6 +30,7 @@ func main() {
 		fmt.Printf("Expected only one file but got %d\n", len(args))
 		flag.Usage()
 	}
+	run(args[0], int(port), openBrowser)
 }
 
 func run(file string, port int, openBrowser bool) {
