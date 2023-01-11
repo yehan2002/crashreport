@@ -84,7 +84,7 @@ func (c *CrashReport) readProfiles(f fs.FS) error {
 }
 
 // readJSON reads and parses the given file into dst.
-func (c *CrashReport) readJSON(f fs.FS, name string, dst interface{}) error {
+func (c *CrashReport) readJSON(f fs.FS, name string, dst any) error {
 	buf, err := c.readFile(f, name)
 	if err != nil {
 		return err

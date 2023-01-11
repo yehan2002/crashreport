@@ -132,7 +132,7 @@ func (c *CrashReport) Write(w io.Writer) error {
 	return zw.Close()
 }
 
-func (c *CrashReport) writeJSON(z *zip.Writer, name string, v interface{}) error {
+func (c *CrashReport) writeJSON(z *zip.Writer, name string, v any) error {
 	if v == nil {
 		return nil
 	}
