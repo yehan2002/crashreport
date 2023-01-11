@@ -49,8 +49,6 @@ func (p Profiles) Add(c *Config) {
 type Config struct {
 	Reason []string
 
-	MemStats runtime.MemStats
-
 	NoStack   bool
 	NoSysInfo bool
 
@@ -60,10 +58,11 @@ type Config struct {
 
 func Create(c Config) (*CrashReport, error) {
 	cr := CrashReport{
-		Reason:   strings.Join(c.Reason, "\n"),
-		Memstats: c.MemStats,
-		Files:    c.Files,
+		Reason: strings.Join(c.Reason, "\n"),
+		Files:  c.Files,
 	}
+
+	runtime.ReadMemStats(&cr.Memstats)
 
 	if !c.NoStack {
 		buf := make([]byte, 1<<16)

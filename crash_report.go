@@ -3,7 +3,6 @@ package crashreport
 import (
 	"io"
 	"os"
-	"runtime"
 
 	"github.com/yehan2002/crashreport/internal"
 )
@@ -30,7 +29,6 @@ type CrashReport struct{ c internal.Config }
 // NewCrashReport creates a new crash report
 func NewCrashReport(reason ...string) *CrashReport {
 	c := &CrashReport{c: internal.Config{Reason: reason, Profiles: map[string]struct{}{}}}
-	runtime.ReadMemStats(&c.c.MemStats)
 	return c
 }
 
