@@ -24,8 +24,9 @@ type CrashReport struct {
 	// This will be nil if [Config.NoSysInfo] is true or if the system.json does
 	// not exist in the crash report file.
 	SysInfo *SysInfo
-	// Memstats memory usage statistics of the program
-	Memstats runtime.MemStats
+	// Memstats memory usage statistics of the program.
+	// This will be nil if memstats.json does not exist in the crash report file.
+	Memstats *runtime.MemStats
 	// Build contains build info embedded in the binary of the program.
 	// This will be nil if the build.json does not exist in the crash report file.
 	Build *debug.BuildInfo

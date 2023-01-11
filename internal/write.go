@@ -62,7 +62,9 @@ func Create(c Config) (*CrashReport, error) {
 		Files:  c.Files,
 	}
 
-	runtime.ReadMemStats(&cr.Memstats)
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
+	cr.Memstats = &mem
 
 	if !c.NoStack {
 		buf := make([]byte, 1<<16)
