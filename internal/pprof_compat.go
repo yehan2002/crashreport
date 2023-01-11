@@ -8,6 +8,8 @@ import (
 	"github.com/google/pprof/profile"
 )
 
+// This file contains struct used to make pprof work with the web ui.
+
 type profUI struct{}
 
 func (*profUI) IsTerminal() bool                             { return false }

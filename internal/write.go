@@ -61,7 +61,7 @@ type Config struct {
 func Create(c Config) (*CrashReport, error) {
 	cr := CrashReport{
 		Reason:   strings.Join(c.Reason, "\n"),
-		Memstats: &c.MemStats,
+		Memstats: c.MemStats,
 		Files:    c.Files,
 	}
 
@@ -72,7 +72,7 @@ func Create(c Config) (*CrashReport, error) {
 	}
 
 	if !c.NoSysInfo {
-		cr.SysInfo = getSysInfo()
+		cr.SysInfo = newSysInfo()
 	}
 
 	for profile := range c.Profiles {

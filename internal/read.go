@@ -39,16 +39,20 @@ func Read(filename string) (d *CrashReport, err error) {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "build.json", &data.Build); err != nil {
+	if err = data.readJSON(zr, "build.json", data.Build); err != nil {
 		return nil, err
 	}
 
-	if err = data.readJSON(zr, "system.json", &data.SysInfo); err != nil {
+	if err = data.readJSON(zr, "system.json", data.SysInfo); err != nil {
 		return nil, err
 	}
 
 	if err = data.readJSON(zr, "memstats.json", &data.Memstats); err != nil {
 		return nil, err
+	}
+
+	if data.Files, err = fs.Glob(zr, "include/*"); err != nil {
+		return nil, fmt.Errorf("Unable to get list of included files: %w", err)
 	}
 
 	// read all profiles in the zip file.
