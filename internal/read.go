@@ -11,6 +11,8 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"runtime"
+	"runtime/debug"
 	"strings"
 )
 
@@ -18,8 +20,12 @@ import (
 const maxSize = 1024 * 1024 // 1MB
 
 // Read reads a crash report from the zip file
-func Read(r io.Reader) (d *CrashReport, err error) {
-	report := &CrashReport{}
+func Read(r io.Reader) (report *CrashReport, err error) {
+	report = &CrashReport{
+		Build:    &debug.BuildInfo{},
+		SysInfo:  &SysInfo{},
+		Memstats: &runtime.MemStats{},
+	}
 
 	buf, err := io.ReadAll(r)
 	if err != nil {
@@ -31,11 +37,11 @@ func Read(r io.Reader) (d *CrashReport, err error) {
 		return nil, fmt.Errorf("unable read zip file: %w", err)
 	}
 
-	if err = report.readToString(zr, "reason", &d.Reason); err != nil {
+	if err = report.readToString(zr, "reason", &report.Reason); err != nil {
 		return nil, err
 	}
 
-	if err = report.readToString(zr, "stack", &d.Stack); err != nil {
+	if err = report.readToString(zr, "stack", &report.Stack); err != nil {
 		return nil, err
 	}
 
@@ -84,25 +90,20 @@ func (c *CrashReport) readProfiles(f fs.FS) error {
 }
 
 // readJSON reads and parses the given file into dst.
+// dst must be a non nil pointer to a pointer to struct (**struct)
 func (c *CrashReport) readJSON(f fs.FS, name string, dst any) error {
+	v := reflect.ValueOf(dst)
+
 	buf, err := c.readFile(f, name)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			v.Elem().Set(reflect.Zero(v.Elem().Type()))
+			return nil
+		}
 		return err
 	}
 
-	v := reflect.ValueOf(dst)
-
-	if v.Kind() == reflect.Pointer {
-		// allocate a new value if dst is a pointer to a nil pointer.
-		if elem := v.Elem(); elem.Kind() == reflect.Pointer && elem.IsNil() {
-			zero := reflect.New(elem.Elem().Type())
-			elem.Set(zero)
-			dst = zero.Interface()
-		}
-
-	}
-
-	err = json.Unmarshal(buf, dst)
+	err = json.Unmarshal(buf, v.Elem().Interface())
 	if err != nil {
 		return err
 	}
@@ -114,6 +115,9 @@ func (c *CrashReport) readJSON(f fs.FS, name string, dst any) error {
 func (c *CrashReport) readToString(f fs.FS, name string, dst *string) error {
 	buf, err := c.readFile(f, name)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
 		return err
 	}
 
@@ -124,9 +128,6 @@ func (c *CrashReport) readToString(f fs.FS, name string, dst *string) error {
 func (c *CrashReport) readFile(f fs.FS, name string) (buf []byte, err error) {
 	file, err := f.Open(name)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return nil, nil
-		}
 		return nil, fmt.Errorf("error opening file %s: %w", name, err)
 	}
 
