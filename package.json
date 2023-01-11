@@ -1,0 +1,12 @@
+{
+  "name": "crashreport",
+  "source": "ui/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel --dist-dir tmp-dist",
+    "build": "parcel build --dist-dir internal/ui/html/dist"
+  },
+  "devDependencies": {
+    "parcel": "^2.8.2"
+  }
+}
