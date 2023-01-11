@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -31,9 +32,14 @@ type UI struct {
 
 	listener net.Listener
 
-	serverMux sync.Mutex
-	server    *http.Server
-	ws        []*websocket.Conn
+	server   *http.Server
+	serveMux *http.ServeMux
+	pages    []*page
+
+	crashReport *internal.CrashReport
+
+	mux sync.Mutex
+	ws  []*websocket.Conn
 
 	stop sync.Once
 	run  uint32
@@ -66,27 +72,97 @@ func Run(r io.Reader, port int, openBrowser bool) error {
 
 // newUI Create a newUI ui
 func newUI(data *internal.CrashReport, port int, browser bool) *UI {
-	ui := &UI{port: port, browser: browser, server: &http.Server{}}
-	ui.Reload(data)
+	ui := &UI{port: port, browser: browser, server: &http.Server{}, crashReport: data}
+	if err := ui.Init(data); err != nil {
+		panic(err)
+	}
 	return ui
 }
 
-// Reload reload the page
-func (u *UI) Reload(data *internal.CrashReport) {
+// serveStatic serves a static page at the given url.
+func (u *UI) serveStatic(name, templateName, url string, data any) error {
+	var buf bytes.Buffer
+	tmp := Template.Lookup(templateName)
+	if tmp == nil {
+		return fmt.Errorf("template %s does not exist", templateName)
+	}
+
+	err := tmp.Execute(&buf, data)
+	if err != nil {
+		return fmt.Errorf("error executing template %s: %w", templateName, err)
+	}
+
+	u.serveMux.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
+		_, err := w.Write(buf.Bytes())
+		u.logHTTPErr(r, err)
+	})
+
+	u.pages = append(u.pages, &page{name, template.URL(url), strings.ToLower(name)})
+
+	return nil
+}
+
+func (u *UI) logHTTPErr(r *http.Request, err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error serving request %s: %s", r.URL, err)
+	}
+}
+
+// Init initializes the ui
+func (u *UI) Init(data *internal.CrashReport) error {
 	mux := http.NewServeMux()
-	pages := []*page{}
+	u.serveMux = mux
+
 	for _, prof := range data.Profiles {
-		prof.Register(mux)
-		pages = append(pages, &page{prof.Name(), template.URL("/profile/" + prof.URL()), prof.URL()})
+		err := prof.Register(mux)
+		if err != nil {
+			return err
+		}
+
+		u.pages = append(u.pages, &page{prof.Name(), template.URL("/profile/" + prof.URL()), prof.URL()})
 	}
 
 	if len(data.Stack) != 0 || len(data.Reason) != 0 {
-		mux.HandleFunc("/stacktrace", func(w http.ResponseWriter, _ *http.Request) {
-			Template.Lookup("stack.html").Execute(w, data)
-		})
-		pages = append(pages, &page{"Stack Trace", template.URL("/stacktrace"), "stacktrace"})
+		if err := u.serveStatic("Stack Trace", "stack.html", "/stacktrace", data); err != nil {
+			return err
+		}
 	}
+
+	if data.SysInfo != nil {
+		if err := u.serveStatic("Info", "sys.html", "/info", data.SysInfo); err != nil {
+			return err
+		}
+	}
+
+	if data.Memstats != nil {
+		if err := u.serveStatic("Memory", "mem.html", "/memory", data.Memstats); err != nil {
+			return err
+		}
+	}
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		err := Template.Lookup("main.html").Execute(w, u.pages)
+		u.logHTTPErr(req, err)
+	})
+
+	mux.HandleFunc("/websocket", func(w http.ResponseWriter, r *http.Request) {
+		u.mux.Lock()
+		ws, err := upgrader.Upgrade(w, r, nil)
+		if err == nil {
+			u.ws = append(u.ws, ws)
+		}
+		u.mux.Unlock()
+	})
+
+	mux.HandleFunc("/ok", func(w http.ResponseWriter, req *http.Request) {
+		_, err := w.Write([]byte("ok"))
+		u.logHTTPErr(req, err)
+	})
+
+	mux.Handle("/assets/", http.FileServer(http.FS(html.Resources)))
+
 	if len(data.Stack) != 0 || len(data.Reason) != 0 {
+
 		mux.HandleFunc("/stacktraceJSON", func(w http.ResponseWriter, _ *http.Request) {
 			fr, errs := gostackparse.Parse(strings.NewReader(data.Stack))
 			if errs != nil {
@@ -97,45 +173,11 @@ func (u *UI) Reload(data *internal.CrashReport) {
 				panic(err)
 			}
 		})
-		pages = append(pages, &page{"Stack Trace JSON", template.URL("/stacktraceJSON"), "stacktrace JSON"})
-	}
-	if data.SysInfo != nil {
-		mux.HandleFunc("/info", func(w http.ResponseWriter, _ *http.Request) {
-			Template.Lookup("sys.html").Execute(w, data.SysInfo)
-		})
-		pages = append(pages, &page{"Info", template.URL("/info"), "info"})
+		u.pages = append(u.pages, &page{"Stack Trace JSON", template.URL("/stacktraceJSON"), "stacktrace JSON"})
 	}
 
-	if data.Memstats != nil {
-		mux.HandleFunc("/memory", func(w http.ResponseWriter, _ *http.Request) {
-			Template.Lookup("mem.html").Execute(w, data.Memstats)
-		})
-		pages = append(pages, &page{"Memory", template.URL("/memory"), "memory"})
-	}
-
-	mux.HandleFunc("/websocket", func(w http.ResponseWriter, r *http.Request) {
-		u.serverMux.Lock()
-		ws, err := upgrader.Upgrade(w, r, nil)
-		if err == nil {
-			u.ws = append(u.ws, ws)
-		}
-		u.serverMux.Unlock()
-	})
-
-	mux.HandleFunc("/ok", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("ok")) })
-
-	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		if req.URL.Path != "/" {
-			w.WriteHeader(404)
-			w.Write([]byte("Not Found"))
-		} else {
-			Template.Lookup("main.html").Execute(w, pages)
-		}
-	})
-
-	mux.Handle("/assets/", http.FileServer(http.FS(html.Resources)))
-
-	u.serverMux.Lock()
+	u.mux.Lock()
+	u.serveMux = mux
 	u.server.Handler = mux
 	for i, ws := range u.ws {
 		if ws != nil {
@@ -145,7 +187,9 @@ func (u *UI) Reload(data *internal.CrashReport) {
 			}
 		}
 	}
-	u.serverMux.Unlock()
+	u.mux.Unlock()
+
+	return nil
 }
 
 // Run run the ui
