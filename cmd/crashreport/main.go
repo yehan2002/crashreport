@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fsnotify/fsnotify"
 	"github.com/yehan2002/crashreport/internal"
 	"github.com/yehan2002/crashreport/internal/ui"
 	"golang.org/x/term"
@@ -39,24 +38,11 @@ func run(file string, port int, openBrowser bool) {
 
 	ui := ui.New(data, port, openBrowser)
 
-	watcher, err := fsnotify.NewWatcher()
 	panicErr(err)
-	panicErr(watcher.Add(file))
-
-	go func() { panicErr(<-watcher.Errors) }()
-	go func() {
-		for range watcher.Events {
-			data, err := internal.Read(file)
-			if err == nil {
-				ui.Reload(data)
-			}
-		}
-	}()
 
 	exit, err := ui.Run()
 	panicErr(err)
 	<-exit
-	panicErr(watcher.Close())
 }
 
 func panicErr(err error) {

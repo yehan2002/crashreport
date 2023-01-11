@@ -47,14 +47,14 @@ type page struct {
 var upgrader = websocket.Upgrader{EnableCompression: false}
 
 // New Create a new ui
-func New(data *internal.Data, port int, browser bool) *UI {
+func New(data *internal.CrashReport, port int, browser bool) *UI {
 	ui := &UI{port: port, browser: browser, server: &http.Server{}}
 	ui.Reload(data)
 	return ui
 }
 
 // Reload reload the page
-func (u *UI) Reload(data *internal.Data) {
+func (u *UI) Reload(data *internal.CrashReport) {
 	mux := http.NewServeMux()
 	pages := []*page{}
 	for _, prof := range data.Profiles {
