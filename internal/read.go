@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	"reflect"
 	"strings"
 )
 
@@ -84,7 +85,12 @@ func (c *CrashReport) readJSON(f fs.FS, name string, dst interface{}) error {
 		return err
 	}
 
-	err = json.Unmarshal(buf, err)
+	v := reflect.ValueOf(dst)
+	if v.IsNil() {
+		v.Set(reflect.Zero(v.Type().Elem()))
+	}
+
+	err = json.Unmarshal(buf, dst)
 	if err != nil {
 		return err
 	}

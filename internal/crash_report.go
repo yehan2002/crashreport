@@ -11,12 +11,15 @@ var startTime = time.Now()
 
 type CrashReport struct {
 	Profiles []*Profile
+
 	SysInfo  *SysInfo
 	Memstats *runtime.MemStats
 	Build    *debug.BuildInfo
 
 	Reason string
 	Stack  string
+
+	Files []string
 }
 
 // SysInfo system info

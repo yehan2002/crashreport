@@ -35,10 +35,7 @@ func NewCrashReport(reason ...string) *CrashReport {
 }
 
 // Include includes the given profiles in the crash report
-func (c *CrashReport) Include(p Profiles) *CrashReport {
-	p.Add(&c.c)
-	return c
-}
+func (c *CrashReport) Include(p Profiles) *CrashReport { p.Add(&c.c); return c }
 
 // IncludeCustom includes a custom profile
 func (c *CrashReport) IncludeCustom(name string) *CrashReport {
@@ -76,21 +73,16 @@ func (c *CrashReport) Write(w io.Writer) (err error) {
 		}
 	}()
 
-	cw := internal.CreateWriter(w)
-	cw.Reason(c.c.Reason)
-	for name := range c.c.Profiles {
-		cw.Profile(name)
+	report, err := internal.Create(c.c)
+	if err != nil {
+		return err
 	}
-	for _, file := range c.c.Files {
-		cw.File(file)
+
+	err = report.Write(w)
+	if err != nil {
+		return err
 	}
-	if !c.c.NoStack {
-		cw.Stack()
-	}
-	if !c.c.NoSysInfo {
-		cw.SysInfo()
-	}
-	cw.Close()
+
 	return
 }
 
@@ -100,9 +92,11 @@ func (c *CrashReport) WriteTo(filename string) error {
 	if err != nil {
 		return err
 	}
+
 	err = c.Write(f)
 	if err != nil {
 		return err
 	}
+
 	return f.Close()
 }
