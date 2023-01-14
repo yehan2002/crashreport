@@ -71,7 +71,7 @@ func Read(r io.Reader) (report *CrashReport, err error) {
 
 // readProfiles reads all profile files in the given fs
 func (c *CrashReport) readProfiles(f fs.FS) error {
-	profiles, err := fs.Glob(f, "*.prof")
+	profiles, err := fs.Glob(f, "profiles/*.prof")
 	if err != nil {
 		return fmt.Errorf("unable to find profile files: %w", err)
 	}

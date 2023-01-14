@@ -2,7 +2,6 @@ package ui
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -16,7 +15,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/DataDog/gostackparse"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/browser"
 	"github.com/yehan2002/crashreport/internal"
@@ -160,21 +158,6 @@ func (u *UI) Init(data *internal.CrashReport) error {
 	})
 
 	mux.Handle("/assets/", http.FileServer(http.FS(html.Resources)))
-
-	if len(data.Stack) != 0 || len(data.Reason) != 0 {
-
-		mux.HandleFunc("/stacktraceJSON", func(w http.ResponseWriter, _ *http.Request) {
-			fr, errs := gostackparse.Parse(strings.NewReader(data.Stack))
-			if errs != nil {
-				panic(errs)
-			}
-			err := json.NewEncoder(w).Encode(fr)
-			if err != nil {
-				panic(err)
-			}
-		})
-		u.pages = append(u.pages, &page{"Stack Trace JSON", template.URL("/stacktraceJSON"), "stacktrace JSON"})
-	}
 
 	u.mux.Lock()
 	u.serveMux = mux
