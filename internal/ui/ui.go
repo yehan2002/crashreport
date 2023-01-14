@@ -2,6 +2,7 @@ package ui
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -137,6 +138,19 @@ func (u *UI) Init(data *internal.CrashReport) error {
 			return err
 		}
 	}
+
+	reportJSON, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	mux.HandleFunc("/report.json", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("content-type", "application/json")
+		_, err := w.Write(reportJSON)
+
+		u.logHTTPErr(r, err)
+	})
+	u.pages = append(u.pages, &page{Name: "Report JSON", URL: "/report.json", Class: "report"})
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		err := Template.Lookup("main.html").Execute(w, u.pages)

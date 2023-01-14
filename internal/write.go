@@ -69,7 +69,7 @@ func Create(c Config) (*CrashReport, error) {
 	if !c.NoStack {
 		buf := make([]byte, 1<<16)
 		n := runtime.Stack(buf, true)
-		cr.Stack = string(buf[:n])
+		cr.Stack = Stack(buf[:n])
 	}
 
 	if !c.NoSysInfo {
@@ -113,7 +113,7 @@ func (c *CrashReport) Write(w io.Writer) error {
 	if err = c.write(zw, "reason", strings.NewReader(c.Reason)); err != nil {
 		return err
 	}
-	if err = c.write(zw, "stack", strings.NewReader(c.Stack)); err != nil {
+	if err = c.write(zw, "stack", strings.NewReader(*(*string)(&c.Stack))); err != nil {
 		return err
 	}
 

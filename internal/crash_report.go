@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"runtime"
@@ -8,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/DataDog/gostackparse"
 	"github.com/google/pprof/driver"
 	"github.com/google/pprof/profile"
 )
@@ -18,7 +20,7 @@ var startTime = time.Now()
 // CrashReport a crash report
 type CrashReport struct {
 	// Profiles profiles included in the crash report
-	Profiles []*Profile
+	Profiles []*Profile `json:"-"`
 
 	// SysInfo contains information about the system the process was running in.
 	// This will be nil if [Config.NoSysInfo] is true or if the system.json does
@@ -34,10 +36,21 @@ type CrashReport struct {
 	// Reason the reason the program crashed.
 	Reason string
 	// Stack the full stack trace of the program
-	Stack string
+	Stack Stack
 
 	// Files extra files included in the crash report.
 	Files []string
+}
+
+// Stack a stack trace
+type Stack string
+
+func (s Stack) MarshalJSON() ([]byte, error) {
+	stack, err := gostackparse.Parse(strings.NewReader(string(s)))
+	if len(err) != 0 {
+		return nil, err[0]
+	}
+	return json.Marshal(stack)
 }
 
 // SysInfo contains information about the system the process was running in.
@@ -99,15 +112,21 @@ type Profile struct {
 	name    string
 }
 
-func (p *Profile) URL() string  { return strings.ToLower(p.name) }
+// URL returns the url the profile should be served at.
+func (p *Profile) URL() string { return strings.ToLower(p.name) }
+
+// Name returns the name of the profile
 func (p *Profile) Name() string { return p.name }
 
+// Profile parses and returns the profile
 func (p *Profile) Profile() (*profile.Profile, error) {
 	return profile.ParseData(p.profile)
 }
 
+// ProfileBytes returns the profile as a byte slice
 func (p *Profile) ProfileBytes() []byte { return p.profile }
 
+// Register registers a http handler that displays this profile
 func (p *Profile) Register(mux *http.ServeMux) error {
 	prof, err := p.Profile()
 	if err != nil {
@@ -127,6 +146,7 @@ func (p *Profile) Register(mux *http.ServeMux) error {
 	}, UI: &profUI{}, Flagset: &fakeFlags{}, Fetch: &fetcher{P: prof}})
 }
 
+// NewProfile creates a new profile
 func NewProfile(name string, prof []byte) *Profile {
 	return &Profile{profile: prof, name: strings.Title(name)}
 }

@@ -41,7 +41,7 @@ func Read(r io.Reader) (report *CrashReport, err error) {
 		return nil, err
 	}
 
-	if err = report.readToString(zr, "stack", &report.Stack); err != nil {
+	if err = report.readToString(zr, "stack", (*string)(&report.Stack)); err != nil {
 		return nil, err
 	}
 
