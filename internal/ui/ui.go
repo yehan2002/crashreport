@@ -3,6 +3,7 @@ package ui
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -17,6 +19,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/maruel/panicparse/v2/stack"
 	"github.com/pkg/browser"
 	"github.com/yehan2002/crashreport/internal"
 	"github.com/yehan2002/crashreport/internal/ui/html"
@@ -152,6 +155,14 @@ func (u *UI) Init(data *internal.CrashReport) error {
 	})
 	u.pages = append(u.pages, &page{Name: "Report JSON", URL: "/report.json", Class: "report"})
 
+	mux.HandleFunc("/report2", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("content-type", "text/html")
+		err := parseStack(*(*string)(&data.Stack), w, data.Build, stack.ExactFlags)
+		u.logHTTPErr(r, err)
+	})
+
+	u.pages = append(u.pages, &page{Name: "Report JSON2", URL: "/report2", Class: "report"})
+
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		err := Template.Lookup("main.html").Execute(w, u.pages)
 		u.logHTTPErr(req, err)
@@ -187,6 +198,49 @@ func (u *UI) Init(data *internal.CrashReport) error {
 	u.mux.Unlock()
 
 	return nil
+}
+
+func parseStack(in string, out io.Writer, build *debug.BuildInfo, s stack.Similarity) error {
+	opts := stack.DefaultOpts()
+	var prefix bytes.Buffer
+	c, _, err := stack.ScanSnapshot(strings.NewReader(in), &prefix, opts)
+	if err != nil && !errors.Is(err, io.EOF) {
+		return err
+	}
+
+	for _, g := range c.Goroutines {
+		updateStack(&g.Stack, build)
+		updateStack(&g.CreatedBy, build)
+	}
+
+	if c.IsRace() {
+		return c.ToHTML(out, "")
+	}
+	return c.Aggregate(stack.ExactLines).ToHTML(out, "")
+}
+
+// updateStack tries to guess import paths using BuildInfo.
+func updateStack(stack *stack.Stack, build *debug.BuildInfo) {
+	for i := range stack.Calls {
+		call := &stack.Calls[i]
+		if !strings.HasPrefix(call.RelSrcPath, call.ImportPath) {
+			var mod *debug.Module
+			for i := range build.Deps {
+				if strings.Contains(call.RemoteSrcPath, build.Deps[i].Path) {
+					mod = build.Deps[i]
+					break
+				}
+			}
+
+			if mod == nil {
+				continue
+			}
+
+			modPath := strings.SplitN(strings.Split(call.RemoteSrcPath, mod.Path)[1], "/", 2)[1]
+			call.RelSrcPath = mod.Path + "/" + modPath
+			call.ImportPath = call.RelSrcPath[:strings.LastIndexByte(call.RelSrcPath, '/')]
+		}
+	}
 }
 
 // Run run the ui

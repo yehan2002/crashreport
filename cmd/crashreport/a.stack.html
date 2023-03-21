@@ -1,0 +1,880 @@
+<!DOCTYPE html><meta charset="UTF-8">
+<meta name="author" content="Marc-Antoine Ruel" >
+<meta name="generator" content="https://github.com/maruel/panicparse" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PanicParse</title>
+<link rel="shortcut icon" type="image/gif" href="data:image/gif;base64,R0lGODlhQABAAMZhACEhISIiIiMjIyQkJCUlJSYmJicnJygoKCkpKSoqKisrKywsLC0tLS4uLi8vLzAwMDExMTIyMjMzMzQ0NDU1NTY2Njc3Nzg4ODk5OTo6Ojs7Ozw8PD09PT4&#43;Pj8/P0BAQEFBQUJCQkNDQ0REREVFRUZGRkdHR4o1MEhISElJSUpKSktLS0xMTE1NTU5OTk9PT1BQUFFRUVJSUv8fQFNTU1RUVKc&#43;N1VVVVZWVldXV/8mPVhYWFlZWf8oPP8pO1paWltbW1xcXF1dXV5eXl9fX2BgYGFhYf80NWJiYv8&#43;MP9ALvRDNv9JKcxYUfRPQ/9PJvRTSP9VI/9aIPRcUf9dHudhV/9lGv91EP91Ef96Dv99C/9&#43;DP&#43;FB/&#43;MA/&#43;PAf&#43;QAP&#43;RAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH5BAEKAH8ALAAAAABAAEAAAAf&#43;gH&#43;Cg4SFhoeIiYqLjI2Oj5CRjSkjJiqSkl6YfyMXCQCgBRUkm45ahF&#43;NJRIBAAEKEhIKAAIepYVgg0uCVINXjCocAwAEGSWEHwIBI7eoXIRHgklSiyQPrhcohx0AEM2FVkqFM4sfBQALIokqBAKX34PijigVrhYpiwwAzN&#43;7g1NOmqzrYACAgRCNFgAwAa8QlCUnQLwTpGKEhgP2tAEbQGBiMyxPdPypYgPUAAYRJDA450oCv0YfAESAl6tQig4MBIACFYCBhmOKVqh4p8IBAFsNB/kgVBEEiBEeE7loYSLF0BQYJEQt5e8PE0E9MMmAocGAAQgdSgwdmvRPlkH&#43;USThoKFhgQIEBtopwAB1a6kug7ZAAsLjRgYIDxowuFtgQCutDWtCEkJZSI4NFShIiJB4AV7HAVD4bWuoiGkiOWSo6KAhAwYLmiE4WJAgbwAPo0kLKmKkSA4VIZx&#43;&#43;OCBwwbXFiZEcMCg9oAJudvyNlKDxIgRJLKPEBH8Q4fjsJc3N4CArW5CRZD8MEGihAkUKFLAN1GChAgQxTNcoLDccwES0X1jBBIwkFCVCiuwoKCCQqFQwgghfMCBfvzNdgAHQp33R28rlCAaCy68AMOIMLzwQgssqIACCRFOmBwEDSSAQF&#43;6mZaChyu08EIMMtBQw480yBDDiSus2CIGFUj&#43;8IBnBogQoCS83YjCCi7AQMMNOOSww5Y54FDDWC0UyaIHG&#43;wHY20EAJgUEUawQMKULsRAAw47/ABEEHgStsMNNMDQggomjABCBxlYIIGFBBwgWkNF3CCCJS1YiQMPQAhBBBFFEDGEEEDsMJefKpQgApkXTAABAwgUEIBWTzKyqQhvsvDCnDwEMcR0RuRaxBCd3iDDC0UKygGSEcRogE4SNRMEES2IoFYLMdywAxBD5GqttbsCkUMNfqbAIqGGOqDAAcMkYN4mnH7w6AovyIDDD0Lgeq2uQhQmgwuAjqpBckuSCwputwjhwgcjoMCClTkAwea88w7xw1zAmiDCB2X&#43;TvAAqgS00sC5kVT6AQixwlDDDssyPC8R2tLwAgsojEBxqacikDEoam3yww0cgJzCwSMHIa/JKOfQJ8sul0lBzDMDsEGrh/zQQs4hj6ywydcGrXKwL5uKcSvdMG3IDyNsQLDBsyZcLdW5OozDrytInPWSMnNtAMeO5MDDBmKv64K7PMSLdhFBFBYDvqJ6sK&#43;SC/i706KRTGqBBh6E8GwMUt9qchFC/LBtt99mkKS4Bgyzk5qR3HBDBRlATbYM0lL7MxGZ73lv2y4Py5&#43;xOu2UbCRfUnBB3s9a2bqtl2oaxA&#43;yr3xjCIaXenHcOwGwOyQ/SmBBBh08BanwdtsJBBD&#43;P/CQg68nAlq754cmLvpOTkoiQw0S&#43;L5B5G/mCMP7WOagPw43fFl&#43;oIPSAMxwFz0A1EwSNDAU6jjwgRC8SQU6uh8NJhikGMDABSliD/M2gKT0HSBpPKGbI2TAAQhM4HoMdGBVchQiE5kIgytIQaA2WCiLjSd3O1GA1wpRIAdEgAIojNwIPGSVFSTIiCqQ4YPwAx5TNWBcBCggACqwQ0JgcAE&#43;BGIG5gcCEWDHPfBBAX2sE6Hv1LA/qcLhTj5QxUHISiVZtAAGNsABD4AgBCLw4nXyCALicEADr1HObNIoRQJYpRQtAEECGODDCVTgAlvkQAc8MJzheMADHfijfir&#43;YKpBhk6KU2wjIYyogARgEQLxs8AFMJABDeDtla3BwAU4qaQGMGl90QuAJZqxAoIgQAENeAAqHWkBVV7gmBewQGYmIAHZLCZVuIweFb8xlJUcwJQNcAAEUjKBblKgm7HgjANsmYADFECN0SMA45pREY6Qx5QMyOYDhAkBxDxgnAygzQHygs7oAawhKthAANx5AAQkQAELWAADFprQUiJgn&#43;0A5U6oKEpEDIUCrhDAAApgloIi4KMPNUABCDAAZUgUFBA4ZFsuupMAaJQjBIgpSUvKtZN2Q6WkGcoFasqTAPiUpzYFAAVwqpuhmCOoQR1AB0SYUxVVAKhIBUUE1FI6UUkMhQQV6KdEV&#43;WkqpZiKCgoYRRBOYAHcMASTNWQIdYSKhBw4K0MBNBa1GpVtrJ1BXTNq173qohAAAA7"/>
+<style>* {
+font-family: inherit;
+font-size: 1em;
+margin: 0;
+padding: 0;
+}
+html {
+box-sizing: border-box;
+font-size: 62.5%;
+}
+*, *:before, *:after {
+box-sizing: inherit;
+}
+h1, h2 {
+margin-bottom: 0.2em;
+margin-top: 0.8em;
+}
+h1 {
+font-size: 1.4em;
+}
+h2 {
+font-size: 1.2em;
+}
+body {
+font-size: 1.6em;
+margin: 2px;
+}
+li {
+margin-left: 2.5em;
+}
+a {
+color: inherit;
+text-decoration: inherit;
+}
+ol, ul {
+margin-bottom: 0.5em;
+margin-top: 0.5em;
+}
+p {
+margin-bottom: 2em;
+}
+table {
+margin: 0.6em;
+}
+table tr:nth-child(odd) {
+background-color: #F0F0F0;
+}
+table tr:hover {
+background-color: #DDD !important;
+}
+table td {
+font-family: monospace;
+padding: 0.2em 0.4em 0.2em;
+}
+.call {
+font-family: monospace;
+}
+@media screen and (max-width: 500px) {
+h1 {
+font-size: 1.3em;
+}
+}
+@media screen and (max-width: 500px) and (orientation: portrait) {
+.args span {
+display: none;
+}
+.args::after {
+content: '…';
+}
+}
+.created {
+white-space: nowrap;
+}
+.race {
+font-weight: 700;
+color: #600;
+}
+#content {
+width: 100%;
+}
+.hastooltip:hover .tooltip {
+background: #fffAF0;
+border: 1px solid #DCA;
+border-radius: 6px;
+box-shadow: 5px 5px 8px #CCC;
+color: #111;
+display: inline;
+position: absolute;
+}
+.tooltip {
+display: none;
+line-height: 16px;
+margin-left: 1rem;
+margin-top: 2.5rem;
+padding: 1rem;
+z-index: 10;
+}
+.bottom-padding {
+margin-top: 5em;
+}.FuncMain {
+color: #880;
+}
+.FuncLocationUnknown {
+color: #888;
+}
+.FuncGoMod {
+color: #800;
+}
+.FuncGOPATH {
+color: #109090;
+}
+.FuncGoPkg {
+color: #008;
+}
+.FuncStdlib {
+color: #080;
+}
+.Exported {
+font-weight: 700;
+}
+</style>
+<div id="content">
+<h1>Signature #0: 1 routine: <span class="state">running</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/main.go<br>Func: main.run
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/Firework/blob/master/main.go#L86">main.go:86</a> <span class="FuncMain Exported">
+<a href="https://godoc.org/github.com/FireworkMC/Firework">main.run</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/yehan2002/crashreport/internal#CrashWriter.Stack">internal</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/github.com/yehan2002/crashreport@v1.0.3/internal/writer.go<br>Func: github.com/yehan2002/crashreport/internal.(*CrashWriter).Stack
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/github.com/yehan2002/crashreport@v1.0.3/internal/writer.go">writer.go:79</a>
+</td>
+<td>
+<span class="FuncGoMod Exported"><a href="https://godoc.org/github.com/yehan2002/crashreport/internal#CrashWriter.Stack">(*CrashWriter).Stack</a></span>(<span class="args"><span>*CrashWriter(0xc00965be88)</span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://godoc.org/github.com/yehan2002/crashreport#CrashReport.Write">crashreport</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/github.com/yehan2002/crashreport@v1.0.3/crash_report.go<br>Func: github.com/yehan2002/crashreport.(*CrashReport).Write
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/github.com/yehan2002/crashreport@v1.0.3/crash_report.go">crash_report.go:96</a>
+</td>
+<td>
+<span class="FuncGoMod Exported"><a href="https://godoc.org/github.com/yehan2002/crashreport#CrashReport.Write">(*CrashReport).Write</a></span>(<span class="args"><span>*CrashReport(0xc00965c120), Writer{#3, #7}</span></span>)
+</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log">log</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/internal/log/console.go<br>Func: github.com/FireworkMC/Firework/internal/log.(*consoleLogger).writeCrashReport
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/internal/log/console.go#L203">console.go:203</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log">(*consoleLogger).writeCrashReport</a></span>(<span class="args"><span>*consoleLogger(0xc0062a8420), string(0xc000284140, len=578), Writer{#3, #7}</span></span>)
+</td>
+</tr><tr>
+<td>3</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log">log</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/internal/log/console.go<br>Func: github.com/FireworkMC/Firework/internal/log.(*consoleLogger).crashReport
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/internal/log/console.go#L181">console.go:181</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log">(*consoleLogger).crashReport</a></span>(<span class="args"><span>*consoleLogger(#6), string(#2, len=39), string(0xc00053a870, len=77)</span></span>)
+</td>
+</tr><tr>
+<td>4</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log#consoleLogger.EncodeEntry">log</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/internal/log/console.go<br>Func: github.com/FireworkMC/Firework/internal/log.(*consoleLogger).EncodeEntry
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/internal/log/console.go#L64">console.go:64</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework/internal/log#consoleLogger.EncodeEntry">(*consoleLogger).EncodeEntry</a></span>(<span class="args"><span>*consoleLogger(#6), Entry{0x5, 0xc0e6d85e9c9cd4a8, #5, #4, #1, 0x6, #2, 0x27, 0x0, ...}, …</span></span>)
+</td>
+</tr><tr>
+<td>5</td>
+<td>
+<a href="https://godoc.org/go.uber.org/zap/zapcore#ioCore.Write">zapcore</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/zapcore/core.go<br>Func: go.uber.org/zap/zapcore.(*ioCore).Write
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/zapcore/core.go">core.go:95</a>
+</td>
+<td>
+<span class="FuncGoMod Exported"><a href="https://godoc.org/go.uber.org/zap/zapcore#ioCore.Write">(*ioCore).Write</a></span>(<span class="args"><span>*ioCore(0xc0002fd3e0), Entry{0x5, 0xc0e6d85e9c9cd4a8, #5, #4, #1, 0x6, #2, 0x27, 0x0, ...}, …</span></span>)
+</td>
+</tr><tr>
+<td>6</td>
+<td>
+<a href="https://godoc.org/go.uber.org/zap/zapcore#CheckedEntry.Write">zapcore</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/zapcore/entry.go<br>Func: go.uber.org/zap/zapcore.(*CheckedEntry).Write
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/zapcore/entry.go">entry.go:255</a>
+</td>
+<td>
+<span class="FuncGoMod Exported"><a href="https://godoc.org/go.uber.org/zap/zapcore#CheckedEntry.Write">(*CheckedEntry).Write</a></span>(<span class="args"><span>*CheckedEntry(0xc0000b3c70), Field{0x0, 0x0, 0x0}</span></span>)
+</td>
+</tr><tr>
+<td>7</td>
+<td>
+<a href="https://godoc.org/go.uber.org/zap#Logger.Fatal">zap</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/logger.go<br>Func: go.uber.org/zap.(*Logger).Fatal
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0/logger.go">logger.go:269</a>
+</td>
+<td>
+<span class="FuncGoMod Exported"><a href="https://godoc.org/go.uber.org/zap#Logger.Fatal">(*Logger).Fatal</a></span>(<span class="args"><span>*Logger(0xc000086fa8), string(#2, len=2), Field{0x0, 0x0, 0x0}</span></span>)
+</td>
+</tr><tr>
+<td>8</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework">main</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/main.go<br>Func: main.run.func1
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/main.go#L106">main.go:106</a>
+</td>
+<td>
+<span class="FuncMain Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework">run.func1</a></span>(<span class="args"><span></span></span>)
+</td>
+</tr></table>
+<h1>Signature #1: 1 routine: <span class="state">select</span></h1>
+<table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/server#Server.Start">server</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/server/server.go<br>Func: github.com/FireworkMC/Firework/server.(*Server).Start
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/server/server.go#L150">server.go:150</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework/server#Server.Start">(*Server).Start</a></span>(<span class="args"><span>*Server(#21), Context{#12, #14}</span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework">main</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/main.go<br>Func: main.run
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/main.go#L120">main.go:120</a>
+</td>
+<td>
+<span class="FuncMain Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework">run</a></span>(<span class="args"><span>*Config(#19)</span></span>)
+</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework#main">main</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/main.go<br>Func: main.main
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/main.go#L75">main.go:75</a>
+</td>
+<td>
+<span class="FuncMain Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework#main">main</a></span>(<span class="args"><span></span></span>)
+</td>
+</tr></table>
+<h1>Signature #2: 1 routine: <span class="state">chan receive</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/github.com/panjf2000/ants@v1.3.0/pool.go<br>Func: github.com/panjf2000/ants.NewPool
+<br>Location: GoMod
+</span><a href="file:////home/yehan/.cache/go/pkg/mod/github.com/panjf2000/ants@v1.3.0/pool.go">pool.go:163</a> <span class="FuncGoMod Exported">
+<a href="https://godoc.org/main#NewPool">ants.NewPool</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/main">ants</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/.cache/go/pkg/mod/github.com/panjf2000/ants@v1.3.0/pool.go<br>Func: github.com/panjf2000/ants.(*Pool).periodicallyPurge
+<br>Location: GoMod
+</span>
+<a href="file:////home/yehan/.cache/go/pkg/mod/github.com/panjf2000/ants@v1.3.0/pool.go">pool.go:84</a>
+</td>
+<td>
+<span class="FuncGoMod"><a href="https://godoc.org/main">(*Pool).periodicallyPurge</a></span>(<span class="args"><span>*Pool(#18)</span></span>)
+</td>
+</tr></table>
+<h1>Signature #3: 1 routine: <span class="state">IO wait</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/net.go<br>Func: github.com/FireworkMC/protocol/java/net.NewAsync
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/protocol/blob/master/java/net/net.go#L227">net.go:227</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#NewAsync">net.NewAsync</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://golang.org/pkg/runtime">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/runtime/netpoll.go<br>Func: internal/poll.runtime_pollWait
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/runtime/netpoll.go#L305">netpoll.go:305</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/runtime">runtime_pollWait</a></span>(<span class="args"><span>*pollDesc(#37), 114</span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_poll_runtime.go<br>Func: internal/poll.(*pollDesc).wait
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_poll_runtime.go#L84">fd_poll_runtime.go:84</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/internal/poll">(*pollDesc).wait</a></span>(<span class="args"><span>*pollDesc(#32), 824779882512, false</span></span>)
+</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_poll_runtime.go<br>Func: internal/poll.(*pollDesc).waitRead
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_poll_runtime.go#L89">fd_poll_runtime.go:89</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/internal/poll">(*pollDesc).waitRead</a></span>(<span class="args"><span>…</span></span>)
+</td>
+</tr><tr>
+<td>3</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll#FD.Read">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_unix.go<br>Func: internal/poll.(*FD).Read
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_unix.go#L167">fd_unix.go:167</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/internal/poll#FD.Read">(*FD).Read</a></span>(<span class="args"><span>*FD(#32), []byte(#35 len=1 cap=1)</span></span>)
+</td>
+</tr><tr>
+<td>4</td>
+<td>
+<a href="https://golang.org/pkg/net#netFD.Read">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/net/fd_posix.go<br>Func: net.(*netFD).Read
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/net/fd_posix.go#L55">fd_posix.go:55</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/net#netFD.Read">(*netFD).Read</a></span>(<span class="args"><span>*netFD(#32), []byte(#35 len=824637627968 cap=4244141)</span></span>)
+</td>
+</tr><tr>
+<td>5</td>
+<td>
+<a href="https://golang.org/pkg/net#conn.Read">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/net/net.go<br>Func: net.(*conn).Read
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/net/net.go#L183">net.go:183</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/net#conn.Read">(*conn).Read</a></span>(<span class="args"><span>*conn(#26), []byte(#35 len=824637628024 cap=4247990)</span></span>)
+</td>
+</tr><tr>
+<td>6</td>
+<td>
+<a href="https://golang.org/pkg/io#ReadAtLeast">io</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/io/io.go<br>Func: io.ReadAtLeast
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/io/io.go#L332">io.go:332</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/io#ReadAtLeast">ReadAtLeast</a></span>(<span class="args"><span>Reader{#10, #26}, []byte(#35 len=1 cap=1), 1</span></span>)
+</td>
+</tr><tr>
+<td>7</td>
+<td>
+<a href="https://golang.org/pkg/io#ReadFull">io</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/io/io.go<br>Func: io.ReadFull
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/io/io.go#L351">io.go:351</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/io#ReadFull">ReadFull</a></span>(<span class="args"><span>…</span></span>)
+</td>
+</tr><tr>
+<td>8</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/proto.go<br>Func: github.com/FireworkMC/protocol/java/net.(*protocol).readUvarint
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/net/proto.go#L237">proto.go:237</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">(*protocol).readUvarint</a></span>(<span class="args"><span>*protocol(#34)</span></span>)
+</td>
+</tr><tr>
+<td>9</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#protocol.ReadPacket">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/proto.go<br>Func: github.com/FireworkMC/protocol/java/net.(*protocol).ReadPacket
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/net/proto.go#L52">proto.go:52</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#protocol.ReadPacket">(*protocol).ReadPacket</a></span>(<span class="args"><span>*protocol(#34)</span></span>)
+</td>
+</tr><tr>
+<td>10</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#Conn.Read">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/net.go<br>Func: github.com/FireworkMC/protocol/java/net.(*Conn).Read
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/net/net.go#L141">net.go:141</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#Conn.Read">(*Conn).Read</a></span>(<span class="args"><span>*Conn(#34)</span></span>)
+</td>
+</tr><tr>
+<td>11</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/async.go<br>Func: github.com/FireworkMC/protocol/java/net.(*AsyncConn).asyncRead
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/net/async.go#L72">async.go:72</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">(*AsyncConn).asyncRead</a></span>(<span class="args"><span>*AsyncConn(#30), #11, #25</span></span>)
+</td>
+</tr></table>
+<h1>Signature #4: 1 routine: <span class="state">chan receive</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/server.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).listen
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/protocol/blob/master/java/server.go#L134">server.go:134</a> <span class="FuncGOPATH">
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java">java.(*Listener).listen</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/protocol/p498#Handler.ReceivePackets">p498</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/protocol/p498/out.go<br>Func: github.com/FireworkMC/protocol/java/protocol/p498.(*Handler).ReceivePackets
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/protocol/p498/out.go#L33">out.go:33</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/protocol/p498#Handler.ReceivePackets">(*Handler).ReceivePackets</a></span>(<span class="args"><span>*Handler(#28)</span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol#Protocol.ReceivePackets">protocol</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/protocol.go<br>Func: github.com/FireworkMC/protocol.(*Protocol).ReceivePackets
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/protocol.go#L292">protocol.go:292</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/protocol#Protocol.ReceivePackets">(*Protocol).ReceivePackets</a></span>(<span class="args"><span>*Protocol(#21)</span></span>)
+</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/server">server</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/server/player.go<br>Func: github.com/FireworkMC/Firework/server.(*Server).join
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/server/player.go#L88">player.go:88</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/Firework/server">(*Server).join</a></span>(<span class="args"><span>*Server(#21), Context{#11, #25}, *Conn(#34), *GameProfile(#24), func(#15)</span></span>)
+</td>
+</tr><tr>
+<td>3</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java">java</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/handshake.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).handle
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/handshake.go#L86">handshake.go:86</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java">(*Listener).handle</a></span>(<span class="args"><span>*Listener(#33), Context{#13, #20}, *Conn(#34)</span></span>)
+</td>
+</tr></table>
+<h1>Signature #5: 1 routine: <span class="state">IO wait</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/server.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).Listen
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/protocol/blob/master/java/server.go#L109">server.go:109</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java#Listener.Listen">java.(*Listener).Listen</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://golang.org/pkg/runtime">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/runtime/netpoll.go<br>Func: internal/poll.runtime_pollWait
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/runtime/netpoll.go#L305">netpoll.go:305</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/runtime">runtime_pollWait</a></span>(<span class="args"><span>*pollDesc(#38), 114</span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_poll_runtime.go<br>Func: internal/poll.(*pollDesc).wait
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_poll_runtime.go#L84">fd_poll_runtime.go:84</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/internal/poll">(*pollDesc).wait</a></span>(<span class="args"><span>*pollDesc(#31), 139753137366696, false</span></span>)
+</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_poll_runtime.go<br>Func: internal/poll.(*pollDesc).waitRead
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_poll_runtime.go#L89">fd_poll_runtime.go:89</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/internal/poll">(*pollDesc).waitRead</a></span>(<span class="args"><span>…</span></span>)
+</td>
+</tr><tr>
+<td>3</td>
+<td>
+<a href="https://golang.org/pkg/internal/poll#FD.Accept">poll</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/internal/poll/fd_unix.go<br>Func: internal/poll.(*FD).Accept
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/internal/poll/fd_unix.go#L614">fd_unix.go:614</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/internal/poll#FD.Accept">(*FD).Accept</a></span>(<span class="args"><span>*FD(#31)</span></span>)
+</td>
+</tr><tr>
+<td>4</td>
+<td>
+<a href="https://golang.org/pkg/net">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/net/fd_unix.go<br>Func: net.(*netFD).accept
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/net/fd_unix.go#L172">fd_unix.go:172</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/net">(*netFD).accept</a></span>(<span class="args"><span>*netFD(#31)</span></span>)
+</td>
+</tr><tr>
+<td>5</td>
+<td>
+<a href="https://golang.org/pkg/net">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/net/tcpsock_posix.go<br>Func: net.(*TCPListener).accept
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/net/tcpsock_posix.go#L142">tcpsock_posix.go:142</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/net">(*TCPListener).accept</a></span>(<span class="args"><span>error(#27)</span></span>)
+</td>
+</tr><tr>
+<td>6</td>
+<td>
+<a href="https://golang.org/pkg/net#TCPListener.Accept">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/net/tcpsock.go<br>Func: net.(*TCPListener).Accept
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/net/tcpsock.go#L288">tcpsock.go:288</a>
+</td>
+<td>
+<span class="FuncStdlib Exported"><a href="https://golang.org/pkg/net#TCPListener.Accept">(*TCPListener).Accept</a></span>(<span class="args"><span>*TCPListener(#27)</span></span>)
+</td>
+</tr><tr>
+<td>7</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java">java</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/server.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).listen
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/server.go#L133">server.go:133</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java">(*Listener).listen</a></span>(<span class="args"><span>*Listener(#33), Context{#13, #20}</span></span>)
+</td>
+</tr></table>
+<h1>Signature #6: 1 routine: <span class="state">select</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/server/player.go<br>Func: github.com/FireworkMC/Firework/server.(*Server).join
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/Firework/blob/master/server/player.go#L86">player.go:86</a> <span class="FuncGOPATH">
+<a href="https://godoc.org/github.com/FireworkMC/Firework/server">server.(*Server).join</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/player#Player.TickPlayer">player</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/player/tick.go<br>Func: github.com/FireworkMC/Firework/player.(*Player).TickPlayer
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/player/tick.go#L37">tick.go:37</a>
+</td>
+<td>
+<span class="FuncGOPATH Exported"><a href="https://godoc.org/github.com/FireworkMC/Firework/player#Player.TickPlayer">(*Player).TickPlayer</a></span>(<span class="args"><span>*Player(#29), Context{#11, #25}</span></span>)
+</td>
+</tr></table>
+<h1>Signature #7: 1 routine: <span class="state">select</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/world/world_group.go<br>Func: github.com/FireworkMC/Firework/world.NewGroup
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/Firework/blob/master/world/world_group.go#L211">world_group.go:211</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/Firework/world#NewGroup">world.NewGroup</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/world">world</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/world/world_group.go<br>Func: github.com/FireworkMC/Firework/world.(*group).tick
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/world/world_group.go#L139">world_group.go:139</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/Firework/world">(*group).tick</a></span>(<span class="args"><span>*group(#16), Context{#11, #17}</span></span>)
+</td>
+</tr></table>
+<h1>Signature #8: 1 routine: <span class="state">select</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/world/world_group.go<br>Func: github.com/FireworkMC/Firework/world.NewGroup
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/Firework/blob/master/world/world_group.go#L210">world_group.go:210</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/Firework/world#NewGroup">world.NewGroup</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/Firework/world">world</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/Firework/world/world_group.go<br>Func: github.com/FireworkMC/Firework/world.(*group).worldTick
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/Firework/blob/master/world/world_group.go#L171">world_group.go:171</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/Firework/world">(*group).worldTick</a></span>(<span class="args"><span>*group(#16), Context{#11, #17}</span></span>)
+</td>
+</tr></table>
+<h1>Signature #9: 1 routine: <span class="state">chan receive</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/server.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).Listen
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/protocol/blob/master/java/server.go#L112">server.go:112</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java#Listener.Listen">java.(*Listener).Listen</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java">java</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/server.go<br>Func: github.com/FireworkMC/protocol/java.(*Listener).Listen.func1
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/server.go#L113">server.go:113</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java">(*Listener).Listen.func1</a></span>(<span class="args"><span></span></span>)
+</td>
+</tr></table>
+<h1>Signature #10: 1 routine: <span class="state">select</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/net.go<br>Func: github.com/FireworkMC/protocol/java/net.NewAsync
+<br>Location: GOPATH
+</span><a href="https://github.com/FireworkMC/protocol/blob/master/java/net/net.go#L228">net.go:228</a> <span class="FuncGOPATH Exported">
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net#NewAsync">net.NewAsync</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">net</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /home/yehan/go/src/github.com/FireworkMC/protocol/java/net/async.go<br>Func: github.com/FireworkMC/protocol/java/net.(*AsyncConn).asyncWrite
+<br>Location: GOPATH
+</span>
+<a href="https://github.com/FireworkMC/protocol/blob/master/java/net/async.go#L86">async.go:86</a>
+</td>
+<td>
+<span class="FuncGOPATH"><a href="https://godoc.org/github.com/FireworkMC/protocol/java/net">(*AsyncConn).asyncWrite</a></span>(<span class="args"><span>*AsyncConn(#30), Context{#11, #25}</span></span>)
+</td>
+</tr></table>
+<h1>Signature #11: 1 routine: <span class="state">syscall</span></h1>
+ <span class="created">Created by: <span class="call hastooltip"><span class="tooltip">SrcPath: /usr/local/go/src/os/signal/signal.go<br>Func: os/signal.Notify.func1.1
+<br>Location: Stdlib
+</span><a href="https://github.com/golang/go/blob/go1.20/src/os/signal/signal.go#L151">signal.go:151</a> <span class="FuncStdlib Exported">
+<a href="https://golang.org/pkg/os/signal#Notify.func1.1">signal.Notify.func1.1</a></span>()
+</span></span><table class="stack"><tr>
+<td>0</td>
+<td>
+<a href="https://golang.org/pkg/runtime">signal</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/runtime/sigqueue.go<br>Func: os/signal.signal_recv
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/runtime/sigqueue.go#L152">sigqueue.go:152</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/runtime">signal_recv</a></span>(<span class="args"><span></span></span>)
+</td>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://golang.org/pkg/os/signal">signal</a>
+</td>
+<td class="hastooltip">
+<span class="tooltip">SrcPath: /usr/local/go/src/os/signal/signal_unix.go<br>Func: os/signal.loop
+<br>Location: Stdlib
+</span>
+<a href="https://github.com/golang/go/blob/go1.20/src/os/signal/signal_unix.go#L23">signal_unix.go:23</a>
+</td>
+<td>
+<span class="FuncStdlib"><a href="https://golang.org/pkg/os/signal">loop</a></span>(<span class="args"><span></span></span>)
+</td>
+</tr></table></div>
+<h2>Metadata</h2>
+<ul>
+<li>Created on 2023-03-21 10:29:03 &#43;0530 &#43;0530</li>
+<li>go1.20</li><li>GOROOT: /usr/local/go</li><li>GOPATH: /home/yehan/go</li><li>go modules (local):
+<ul><li>/home/yehan/.cache/go/pkg/mod/github.com/panjf2000/ants@v1.3.0: github.com/panjf2000/ants</li><li>/home/yehan/.cache/go/pkg/mod/github.com/yehan2002/crashreport@v1.0.3: github.com/yehan2002/crashreport</li><li>/home/yehan/.cache/go/pkg/mod/go.uber.org/zap@v1.24.0: go.uber.org/zap</li></ul>
+</li><li>GOMAXPROCS: 16</li>
+</ul>
+<h2>Legend</h2>
+<table class="legend">
+<thead>
+<th>Type</th>
+<th>Exported</th>
+<th>Private</th>
+</thead>
+<tr class="call hastooltip">
+<td>
+Package main
+<span class="tooltip">Sources that are in the main package.</span>
+</td>
+<td class="FuncMain">main.Foo()</td>
+<td class="FuncMain">main.foo()</td>
+</tr>
+<tr class="call hastooltip">
+<td>
+Go module
+<span class="tooltip">Sources located inside a directory containing a
+<strong>go.mod</strong> file but outside $GOPATH.</span>
+</td>
+<td class="FuncGoMod Exported">pkg.Foo()</td>
+<td class="FuncGoMod">pkg.foo()</td>
+</tr>
+<tr class="call hastooltip">
+<td>
+$GOPATH/src/...
+<span class="tooltip">Sources located inside the traditional $GOPATH/src
+directory.</span>
+</td>
+<td class="FuncGOPATH Exported">pkg.Foo()</td>
+<td class="FuncGOPATH">pkg.foo()</td>
+</tr>
+<tr class="call hastooltip">
+<td>
+$GOPATH/pkg/mod/...
+<span class="tooltip">Sources located inside the go module dependency
+cache under $GOPATH/pkg/mod. These files are unmodified third parties.</span>
+</td>
+<td class="FuncGoPkg Exported">pkg.Foo()</td>
+<td class="FuncGoPkg">pkg.foo()</td>
+</tr>
+<tr class="call hastooltip">
+<td>
+Standard library
+<span class="tooltip">Sources from the Go standard library under
+$GOROOT/src/.</span>
+</td>
+<td class="FuncStdlib Exported">pkg.Foo()</td>
+<td class="FuncStdlib">pkg.foo()</td>
+</tr>
+<tr class="call hastooltip">
+<td>
+Unknown source location
+<span class="tooltip">Sources which location was not successfully
+determined.</span>
+</td>
+<td class="FuncLocationUnknown Exported">pkg.Foo()</td>
+<td class="FuncLocationUnknown">pkg.foo()</td>
+</tr>
+</table><div class="bottom-padding"></div>

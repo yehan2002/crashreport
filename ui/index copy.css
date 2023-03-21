@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html {
+    font-size: 62.5%;
+}
+
+
+h1,
+h2 {
+    margin-bottom: 0.2em;
+    margin-top: 0.8em;
+}
+
+h1 {
+    font-size: 1.4em;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+body {
+    font-size: 1.6em;
+    margin: 2px;
+}
+
+li {
+    margin-left: 2.5em;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+ol,
+ul {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+p {
+    margin-bottom: 2em;
+}
+
+table {
+    margin: 0.6em;
+}
+
+table tr:nth-child(odd) {
+    @apply bg-slate-700;
+}
+
+table tr:hover {
+    @apply bg-slate-500;
+}
+
+table td {
+    font-family: monospace;
+    padding: 0.2em 0.4em 0.2em;
+}
+
+.call {
+    font-family: monospace;
+}
+
+@media screen and (max-width: 500px) {
+    h1 {
+        font-size: 1.3em;
+    }
+}
+
+@media screen and (max-width: 500px) and (orientation: portrait) {
+    .args span {
+        display: none;
+    }
+
+    .args::after {
+        content: '…';
+    }
+}
+
+.created {
+    white-space: nowrap;
+}
+
+.race {
+    font-weight: 700;
+    color: #600;
+}
+
+#content {
+    width: 100%;
+}
+
+.hastooltip:hover .tooltip {
+    border: 1px solid #DCA;
+    border-radius: 6px;
+    display: inline;
+    position: absolute;
+    @apply bg-slate-700 text-slate-50 inline absolute shadow-md shadow-slate-800 border border-solid border-slate-800;
+}
+
+.tooltip {
+    display: none;
+    line-height: 16px;
+    margin-left: 1rem;
+    margin-top: 2.5rem;
+    padding: 1rem;
+    z-index: 10;
+}
+
+.bottom-padding {
+    margin-top: 5em;
+}
+
+.FuncMain {
+    color: #880;
+}
+
+.FuncLocationUnknown {
+    color: #888;
+}
+
+.FuncGoMod {
+    color: #800;
+}
+
+.FuncGOPATH {
+    color: #109090;
+}
+
+.FuncGoPkg {
+    color: #008;
+}
+
+.FuncStdlib {
+    color: #080;
+}
+
+.Exported {
+    @apply font-semibold;
+}

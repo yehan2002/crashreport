@@ -19,38 +19,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     dependencies.set(testData.Build.Main.Path, testData.Build.Main);
-    let template = dotT.template(document.getElementById("stack-trace-template")?.outerHTML);
-    console.log(template)
-    const parser = new DOMParser();
-    (() => {
-        testData.Stack.forEach((goroutine) => {
-            const routine = parser.parseFromString(template(goroutine), "text/html").body.children[0];
-            console.log(routine);
-            goroutine.Stack.forEach((entry) => {
-                var frame = document.createElement("div")
-                frame.classList.add("px-3");
-                let fn = entry.Func.split("/").reverse()[0];
-                let pkg = fn.split(".")[0];
-                let file = entry.File.split("/").reverse()[0];
-                let fileLocation = `${file}:${entry.Line}`;
-
-                let filePathParts = entry.File.split("/");
-                for (let i = 0; i < filePathParts.length; i++) {
-                    filePathParts.pop();
-                    let filePathJoined = filePathParts.join("/")
-                    dependencies.forEach((k, v) => {
-                        if (filePathJoined.endsWith(k.Path)) {
-                            console.log(v)
-                        }
-                    })
-                };
-
-
-                frame.innerText = `${pkg} ${fileLocation} ${fn}`;
-                routine.appendChild(frame)
-            })
-            document.body.appendChild(routine);
-        })
-    })()
 
 })

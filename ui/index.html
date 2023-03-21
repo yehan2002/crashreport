@@ -10,17 +10,12 @@
 </head>
 
 <body class="bg-white dark:bg-slate-800 dark:text-slate-200 antialiased mx-5 mt-5">
-    <div id="sys-info"></div>
-    <div id="binary-info">
-        Compiler: <span id="compiler-info"></span>
-    </div>
-    <div id="stack-trace"></div>
-    <div id="stack-trace-template" class="py-4">
-        <div>
-            <span class="dark:text-slate-100">Goroutine {{=it.ID}} [{{=it.State}} {{=it.Wait || ""}}]:</span>
+    <section id="build-info">
+        <h1 class="text-xl font-semibold mb-2">Build Info</h1>
+        <div class="ml-4">
+            <span>Compiler: go1.20.2(gcc)</span>
         </div>
-    </div>
-    <script src="./index.ts" type="module"></script>
+    </section>
 </body>
 
 </html>
